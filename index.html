@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCL Predictions</title>
+
+<style>
+:root{
+--bg:#050b18;
+--card:#0c1730;
+--card2:#101f3e;
+--line:#23365d;
+--text:#f4f7ff;
+--muted:#8fa2c7;
+--blue:#2d78ff;
+--blue2:#5aa0ff;
+--green:#2dd881;
+--red:#ff5364;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:radial-gradient(circle at top,#102653 0,#050b18 45%);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+min-height:100vh;
+}
+
+.wrap{
+max-width:1050px;
+margin:auto;
+padding:18px;
+}
+
+header{
+text-align:center;
+padding:22px 10px 14px;
+}
+
+.eyebrow{
+color:#78a8ff;
+font-size:12px;
+letter-spacing:3px;
+font-weight:700;
+}
+
+h1{
+margin:8px 0 5px;
+font-size:30px;
+letter-spacing:1px;
+}
+
+.sub{
+color:var(--muted);
+font-size:13px;
+}
+
+.player{
+background:linear-gradient(135deg,#0d1c39,#0a142b);
+border:1px solid var(--line);
+border-radius:16px;
+padding:16px;
+margin:10px 0 15px;
+}
+
+label{
+display:block;
+font-size:12px;
+color:#a9b8d6;
+margin-bottom:7px;
+font-weight:700;
+letter-spacing:.5px;
+}
+
+input{
+width:100%;
+background:#071126;
+color:white;
+border:1px solid #2b4370;
+border-radius:10px;
+padding:13px;
+font-size:16px;
+outline:none;
+}
+
+input:focus{
+border-color:var(--blue);
+}
+
+.rounds{
+display:flex;
+gap:8px;
+overflow:auto;
+padding:3px 0 12px;
+scrollbar-width:none;
+}
+
+.rounds button{
+min-width:88px;
+border:1px solid var(--line);
+background:#0b1630;
+color:#9db0d3;
+border-radius:11px;
+padding:10px 12px;
+font-weight:700;
+}
+
+.rounds button.active{
+background:var(--blue);
+color:#fff;
+border-color:var(--blue);
+}
+
+.rounds button.locked{
+opacity:.48;
+}
+
+.info{
+font-size:12px;
+color:var(--muted);
+margin:3px 0 14px;
+}
+
+.card{
+background:rgba(12,23,48,.96);
+border:1px solid var(--line);
+border-radius:16px;
+padding:13px;
+margin-bottom:10px;
+}
+
+.match{
+display:grid;
+grid-template-columns:1fr auto 1fr;
+gap:8px;
+align-items:center;
+}
+
+.team{
+font-weight:700;
+font-size:14px;
+line-height:1.25;
+}
+
+.away{
+text-align:right;
+}
+
+.vs{
+font-size:11px;
+color:#60759d;
+font-weight:700;
+}
+
+.options{
+display:flex;
+gap:7px;
+margin-top:11px;
+}
+
+.pick{
+flex:1;
+padding:10px;
+border-radius:9px;
+border:1px solid #29406b;
+background:#0a1429;
+color:#b5c3dc;
+font-weight:800;
+cursor:pointer;
+}
+
+.pick.selected{
+background:var(--blue);
+color:white;
+border-color:var(--blue);
+}
+
+.pick:active{
+transform:scale(.98);
+}
+
+.score-row{
+margin-top:11px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.score-label{
+font-size:11px;
+color:#8296bd;
+font-weight:700;
+white-space:nowrap;
+}
+
+.score-boxes{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.score-input{
+width:52px;
+background:#071126;
+color:white;
+border:1px solid #29406b;
+border-radius:9px;
+padding:9px 5px;
+text-align:center;
+font-size:15px;
+font-weight:800;
+outline:none;
+}
+
+.score-input:focus{
+border-color:var(--blue);
+}
+
+.score-colon{
+font-size:17px;
+color:#8296bd;
+font-weight:800;
+}
+
+.submit{
+width:100%;
+border:0;
+border-radius:13px;
+background:linear-gradient(90deg,#256cf0,#4d9bff);
+color:white;
+font-size:16px;
+font-weight:800;
+padding:15px;
+margin:8px 0 25px;
+cursor:pointer;
+}
+
+.submit:disabled{
+opacity:.5;
+}
+
+.msg{
+display:none;
+text-align:center;
+padding:13px;
+border-radius:12px;
+margin-bottom:15px;
+font-size:13px;
+}
+
+.msg.ok{
+display:block;
+background:rgba(45,216,129,.12);
+border:1px solid rgba(45,216,129,.35);
+color:#75edac;
+}
+
+.msg.err{
+display:block;
+background:rgba(255,83,100,.12);
+border:1px solid rgba(255,83,100,.35);
+color:#ff9aa5;
+}
+
+.lockbox{
+text-align:center;
+padding:28px 12px;
+color:#9eb0d0;
+}
+
+.lockicon{
+font-size:32px;
+margin-bottom:8px;
+}
+
+footer{
+text-align:center;
+color:#566b94;
+font-size:11px;
+padding:0 0 25px;
+}
+
+@media(max-width:560px){
+
+h1{
+font-size:25px;
+}
+
+.team{
+font-size:13px;
+}
+
+.rounds button{
+min-width:78px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header>
+
+<div class="eyebrow">
+✦ UEFA CHAMPIONS LEAGUE ✦
+</div>
+
+<h1>
+UCL PREDICTIONS
+</h1>
+
+<div class="sub">
+Predict the outcome and exact score • 1 / X / 2
+</div>
+
+</header>
+
+
+<div class="player">
+
+<label for="player">
+YOUR DISCORD NAME
+</label>
+
+<input
+id="player"
+type="text"
+maxlength="50"
+placeholder="Enter your Discord name"
+>
+
+</div>
+
+
+<div class="rounds" id="roundNav"></div>
+
+<div class="info" id="roundInfo"></div>
+
+<div id="message" class="msg"></div>
+
+<div id="matches"></div>
+
+<button
+class="submit"
+id="submitBtn"
+onclick="submitPredictions()"
+>
+SUBMIT ROUND PREDICTIONS
+</button>
+
+<footer>
+Outcome hit = 1 point • Exact score = 3 points total • Predictions lock after submission.
+</footer>
+
+</div>
+
+
+<script>
+
+const APPS_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxt1iXHzb3F4oL1M0eHHal-Oc7MiQgkrFHTOfnkYlMabacE7Fjf9akFZyQ4n056BMr1/exec";
+
+
+const rounds = {
+
+1:[
+["AEK Athens","LASK"],
+["Club Brugge","Aston Villa"],
+["Borussia Dortmund","Villarreal"],
+["Porto","Manchester City"],
+["Lille","Real Betis"],
+["Real Madrid","Inter"],
+["Barcelona","Feyenoord"],
+["Stuttgart","Viking"],
+["Liverpool","Atlético de Madrid"],
+["Paris Saint-Germain","Slovan Bratislava"],
+["Sporting CP","Galatasaray"],
+["Napoli","Arsenal"],
+["Fenerbahçe","Roma"],
+["PSV Eindhoven","Shakhtar Donetsk"],
+["Como","Leipzig"],
+["Bayern München","Bodø/Glimt"],
+["Manchester United","Sabah"],
+["Slavia Praha","Lens"]
+],
+
+2:[
+["Lens","Sporting CP"],
+["Sabah","Slavia Praha"],
+["Arsenal","Lille"],
+["Atlético de Madrid","Manchester United"],
+["Inter","Club Brugge"],
+["Galatasaray","Barcelona"],
+["Leipzig","PSV Eindhoven"],
+["Viking","Bayern München"],
+["Villarreal","Napoli"],
+["Feyenoord","Como"],
+["LASK","Liverpool"],
+["Roma","Real Madrid"],
+["Aston Villa","Fenerbahçe"],
+["Shakhtar Donetsk","AEK Athens"],
+["Bodø/Glimt","Borussia Dortmund"],
+["Manchester City","Paris Saint-Germain"],
+["Real Betis","Porto"],
+["Slovan Bratislava","Stuttgart"]
+],
+
+3:[
+["Fenerbahçe","Slavia Praha"],
+["Sabah","Borussia Dortmund"],
+["Roma","Slovan Bratislava"],
+["Porto","PSV Eindhoven"],
+["Liverpool","Villarreal"],
+["Manchester City","AEK Athens"],
+["Paris Saint-Germain","Barcelona"],
+["Napoli","Bodø/Glimt"],
+["Stuttgart","Atlético de Madrid"],
+["Como","Manchester United"],
+["Lille","Galatasaray"],
+["Aston Villa","Viking"],
+["Club Brugge","Lens"],
+["Bayern München","Arsenal"],
+["Inter","Shakhtar Donetsk"],
+["Real Madrid","Leipzig"],
+["Real Betis","Feyenoord"],
+["Sporting CP","LASK"]
+],
+
+4:[
+["Shakhtar Donetsk","Sporting CP"],
+["Galatasaray","Stuttgart"],
+["Atlético de Madrid","Bayern München"],
+["Barcelona","Aston Villa"],
+["Feyenoord","Inter"],
+["Bodø/Glimt","Lille"],
+["LASK","Slovan Bratislava"],
+["Manchester United","Roma"],
+["Villarreal","Paris Saint-Germain"],
+["AEK Athens","Real Madrid"],
+["Fenerbahçe","Liverpool"],
+["Borussia Dortmund","Real Betis"],
+["Porto","Napoli"],
+["PSV Eindhoven","Club Brugge"],
+["Leipzig","Manchester City"],
+["Lens","Como"],
+["Slavia Praha","Arsenal"],
+["Viking","Sabah"]
+],
+
+5:[
+["Bodø/Glimt","LASK"],
+["Galatasaray","Aston Villa"],
+["Arsenal","Borussia Dortmund"],
+["Como","AEK Athens"],
+["Feyenoord","Porto"],
+["Manchester City","Napoli"],
+["Leipzig","Lens"],
+["Real Madrid","PSV Eindhoven"],
+["Slovan Bratislava","Real Betis"],
+["Sabah","Barcelona"],
+["Slavia Praha","Villarreal"],
+["Atlético de Madrid","Viking"],
+["Club Brugge","Liverpool"],
+["Inter","Stuttgart"],
+["Shakhtar Donetsk","Fenerbahçe"],
+["Lille","Bayern München"],
+["Paris Saint-Germain","Roma"],
+["Sporting CP","Manchester United"]
+],
+
+6:[
+["Viking","Feyenoord"],
+["Villarreal","Sabah"],
+["AEK Athens","Galatasaray"],
+["Roma","Sporting CP"],
+["Aston Villa","Paris Saint-Germain"],
+["Barcelona","Manchester City"],
+["Bayern München","Slavia Praha"],
+["Manchester United","Leipzig"],
+["Napoli","Club Brugge"],
+["Real Betis","Como"],
+["Slovan Bratislava","Shakhtar Donetsk"],
+["Arsenal","Real Madrid"],
+["Borussia Dortmund","Inter"],
+["LASK","Fenerbahçe"],
+["Liverpool","Porto"],
+["PSV Eindhoven","Atlético de Madrid"],
+["Lens","Bodø/Glimt"],
+["Stuttgart","Lille"]
+],
+
+7:[
+["Bodø/Glimt","Atlético de Madrid"],
+["Galatasaray","Feyenoord"],
+["AEK Athens","Roma"],
+["Aston Villa","Borussia Dortmund"],
+["Inter","Liverpool"],
+["Porto","Slavia Praha"],
+["Lille","Slovan Bratislava"],
+["Real Madrid","LASK"],
+["Stuttgart","Club Brugge"],
+["Fenerbahçe","Villarreal"],
+["Sabah","Napoli"],
+["Como","Paris Saint-Germain"],
+["Manchester United","Bayern München"],
+["Leipzig","Shakhtar Donetsk"],
+["Lens","Manchester City"],
+["Real Betis","Arsenal"],
+["Sporting CP","Barcelona"],
+["Viking","PSV Eindhoven"]
+],
+
+8:[
+["Arsenal","Sabah"],
+["Roma","Lille"],
+["Atlético de Madrid","Fenerbahçe"],
+["Borussia Dortmund","AEK Athens"],
+["Club Brugge","Bodø/Glimt"],
+["Bayern München","Real Betis"],
+["Barcelona","Como"],
+["Shakhtar Donetsk","Real Madrid"],
+["Feyenoord","Leipzig"],
+["LASK","Porto"],
+["Liverpool","Lens"],
+["Manchester City","Sporting CP"],
+["Paris Saint-Germain","Galatasaray"],
+["PSV Eindhoven","Stuttgart"],
+["Slavia Praha","Aston Villa"],
+["Napoli","Viking"],
+["Villarreal","Manchester United"],
+["Slovan Bratislava","Inter"]
+]
+
+};
+
+
+const roundDates = {
+
+1:"8–10 September 2026",
+2:"13–14 October 2026",
+3:"20–21 October 2026",
+4:"3–4 November 2026",
+5:"24–25 November 2026",
+6:"8–9 December 2026",
+7:"19–20 January 2027",
+8:"27 January 2027"
+
+};
+
+
+const roundUnlockDates = {
+
+1:"2026-09-06T18:45:00+02:00",
+2:"2026-10-11T18:45:00+02:00",
+3:"2026-10-18T18:45:00+02:00",
+4:"2026-11-01T18:45:00+01:00",
+5:"2026-11-22T18:45:00+01:00",
+6:"2026-12-06T18:45:00+01:00",
+7:"2027-01-17T18:45:00+01:00",
+8:"2027-01-25T21:00:00+01:00"
+
+};
+
+
+let currentRound = 1;
+
+const selections = {};
+
+
+function esc(s){
+
+return String(s).replace(
+/[&<>"']/g,
+c=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[c])
+);
+
+}
+
+
+function isOpen(round){
+
+return Date.now() >=
+new Date(roundUnlockDates[round]).getTime();
+
+}
+
+
+function alreadySubmitted(round){
+
+const player=
+(document.getElementById('player').value||'')
+.trim()
+.toLowerCase();
+
+if(!player) return false;
+
+try{
+
+return localStorage.getItem(
+'ucl_submitted_'+player+'_'+round
+)==='1';
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+
+function renderNav(){
+
+const nav=document.getElementById('roundNav');
+
+nav.innerHTML='';
+
+for(let r=1;r<=8;r++){
+
+const b=document.createElement('button');
+
+b.className=
+(r===currentRound?'active ':'')+
+(isOpen(r)?'':'locked');
+
+b.textContent=
+'ROUND '+r+
+(isOpen(r)?'':' 🔒');
+
+b.onclick=()=>{
+
+currentRound=r;
+
+render();
+
+};
+
+nav.appendChild(b);
+
+}
+
+}
+
+
+function render(){
+
+renderNav();
+
+const open=isOpen(currentRound);
+
+const info=document.getElementById('roundInfo');
+
+info.textContent=
+'Round '+currentRound+
+' • '+roundDates[currentRound]+
+' • '+
+(open
+?'OPEN'
+:'LOCKED — opens 2 days before the first match');
+
+
+const box=document.getElementById('matches');
+
+box.innerHTML='';
+
+const btn=document.getElementById('submitBtn');
+
+const submitted=
+alreadySubmitted(currentRound);
+
+
+if(!open){
+
+box.innerHTML=
+'<div class="card lockbox">'+
+'<div class="lockicon">🔒</div>'+
+'<b>Round '+currentRound+' is locked</b>'+
+'<br><br>'+
+'It will open automatically 2 days before the round starts.'+
+'</div>';
+
+btn.disabled=true;
+
+return;
+
+}
+
+
+if(submitted){
+
+box.innerHTML=
+'<div class="card lockbox">'+
+'<div class="lockicon">✅</div>'+
+'<b>Round '+currentRound+' already submitted</b>'+
+'<br><br>'+
+'This browser has already submitted this round for this Discord name.'+
+'</div>';
+
+btn.disabled=true;
+
+return;
+
+}
+
+
+btn.disabled=false;
+
+
+rounds[currentRound].forEach((m,i)=>{
+
+const key=
+currentRound+'_'+i;
+
+const selected=
+selections[key]||'';
+
+const card=
+document.createElement('div');
+
+card.className='card';
+
+card.innerHTML=`
+
+<div class="match">
+
+<div class="team">
+${esc(m[0])}
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team away">
+${esc(m[1])}
+</div>
+
+</div>
+
+
+<div class="options">
+
+<button
+class="pick ${selected==='1'?'selected':''}"
+onclick="pick(${i},'1')"
+>
+1
+</button>
+
+<button
+class="pick ${selected==='X'?'selected':''}"
+onclick="pick(${i},'X')"
+>
+X
+</button>
+
+<button
+class="pick ${selected==='2'?'selected':''}"
+onclick="pick(${i},'2')"
+>
+2
+</button>
+
+</div>
+
+
+<div class="score-row">
+
+<span class="score-label">
+EXACT SCORE
+</span>
+
+<div class="score-boxes">
+
+<input
+class="score-input"
+id="home-score-${i}"
+inputmode="numeric"
+maxlength="2"
+placeholder="2"
+value="${scoreParts(i)[0]}"
+oninput="setScorePart(${i},'home',this.value)"
+>
+
+<span class="score-colon">
+:
+</span>
+
+<input
+class="score-input"
+id="away-score-${i}"
+inputmode="numeric"
+maxlength="2"
+placeholder="1"
+value="${scoreParts(i)[1]}"
+oninput="setScorePart(${i},'away',this.value)"
+>
+
+</div>
+
+</div>
+
+`;
+
+box.appendChild(card);
+
+});
+
+}
+
+
+function pick(i,value){
+
+selections[
+currentRound+'_'+i
+]=value;
+
+render();
+
+}
+
+
+function scoreFor(i){
+
+return selections[
+currentRound+'_score_'+i
+] || '';
+
+}
+
+
+function scoreParts(i){
+
+const value=
+scoreFor(i).replace('-',':');
+
+const parts=
+value.split(':');
+
+return [
+parts[0]||'',
+parts[1]||''
+];
+
+}
+
+
+function setScorePart(i,side,value){
+
+value=
+String(value||'')
+.replace(/\D/g,'')
+.slice(0,2);
+
+const parts=
+scoreParts(i);
+
+if(side==='home')
+parts[0]=value;
+
+else
+parts[1]=value;
+
+selections[
+currentRound+'_score_'+i
+]=
+parts[0]+':'+parts[1];
+
+}
+
+
+function validScore(value){
+
+return /^\d{1,2}:\d{1,2}$/.test(value);
+
+}
+
+
+function showMsg(text,type){
+
+const m=
+document.getElementById('message');
+
+m.className=
+'msg '+type;
+
+m.textContent=text;
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+
+async function submitPredictions(){
+
+const player=
+(document.getElementById('player').value||'')
+.trim();
+
+
+if(!player){
+
+return showMsg(
+'Please enter your Discord name.',
+'err'
+);
+
+}
+
+
+if(!isOpen(currentRound)){
+
+return showMsg(
+'This round is still locked.',
+'err'
+);
+
+}
+
+
+if(alreadySubmitted(currentRound)){
+
+return showMsg(
+'You have already submitted this round on this browser.',
+'err'
+);
+
+}
+
+
+const preds=[];
+
+
+for(
+let i=0;
+i<rounds[currentRound].length;
+i++
+){
+
+const p=
+selections[
+currentRound+'_'+i
+];
+
+
+const score=
+scoreFor(i).replace('-',':');
+
+
+if(!p){
+
+return showMsg(
+'Please predict every match before submitting.',
+'err'
+);
+
+}
+
+
+if(!validScore(score)){
+
+return showMsg(
+'Please enter a valid exact score for every match, e.g. 2:1.',
+'err'
+);
+
+}
+
+
+preds.push({
+
+match:
+rounds[currentRound][i][0]+
+' vs '+
+rounds[currentRound][i][1],
+
+prediction:p,
+
+score:score
+
+});
+
+}
+
+
+const btn=
+document.getElementById('submitBtn');
+
+btn.disabled=true;
+
+btn.textContent=
+'SUBMITTING...';
+
+
+const payload={
+
+player:player,
+
+round:'Round '+currentRound,
+
+predictions:preds
+
+};
+
+
+try{
+
+await fetch(
+APPS_SCRIPT_URL,
+{
+
+method:'POST',
+
+mode:'no-cors',
+
+headers:{
+'Content-Type':
+'text/plain;charset=utf-8'
+},
+
+body:
+JSON.stringify(payload)
+
+});
+
+
+try{
+
+localStorage.setItem(
+'ucl_submitted_'+
+player.toLowerCase()+
+'_'+
+currentRound,
+'1'
+);
+
+}catch(e){}
+
+
+showMsg(
+'Predictions submitted successfully!',
+'ok'
+);
+
+render();
+
+
+}catch(err){
+
+btn.disabled=false;
+
+btn.textContent=
+'SUBMIT ROUND PREDICTIONS';
+
+showMsg(
+'Submission failed. Please try again.',
+'err'
+);
+
+}
+
+}
+
+
+document
+.getElementById('player')
+.addEventListener(
+'input',
+()=>render()
+);
+
+
+render();
+
+</script>
+
+</body>
+</html>
