@@ -3,282 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prediction League & Leaderboard</title>
+  <title>Prediction League</title>
+  
+  <!-- OVDJE ZADRŽAVAŠ SVE TVOJE POSTOJEĆE STILOVE / CSS -->
   <style>
-    /* Osnovni reset i tamna tema */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    /* TVOJI STARI CSS STILOVI IDU OVDE */
 
-    body {
-      background-color: #0d1117;
-      color: #c9d1d9;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 800px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Navigaciona dugmad za prebacivanje tabova */
+    /* DODATAK ZA DUGMAD I TABOVE: */
     .nav-tabs {
       display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid #30363d;
-      padding-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
     }
 
     .tab-btn {
-      flex: 1;
-      padding: 12px;
-      background-color: #21262d;
+      padding: 10px 20px;
+      background-color: #1a2332;
       color: #8b949e;
-      border: 1px solid #30363d;
+      border: 1px solid #2a3b53;
       border-radius: 8px;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: bold;
       cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-
-    .tab-btn:hover {
-      background-color: #30363d;
-      color: #f0f6fc;
+      transition: all 0.3s ease;
     }
 
     .tab-btn.active {
       background-color: #00f0ff;
       color: #0d1117;
       border-color: #00f0ff;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
     }
 
-    /* Prikaz i skrivanje sekcija */
-    .tab-content {
-      display: none;
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Stilovi za Rang Listu */
-    h2 {
-      color: #f0f6fc;
-      margin-bottom: 16px;
-      font-size: 20px;
-      text-align: center;
-    }
-
-    .loader {
-      text-align: center;
-      padding: 30px;
-      color: #00f0ff;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .table-responsive {
-      overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid #30363d;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-      background-color: #0d1117;
-    }
-
-    th {
-      background-color: #161b22;
-      color: #58a6ff;
-      padding: 14px 10px;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #30363d;
-    }
-
-    td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #21262d;
-      font-size: 14px;
-    }
-
-    tr:hover {
-      background-color: #161b22;
-    }
-
-    .player-col {
-      text-align: left;
-      font-weight: 600;
-      color: #f0f6fc;
-    }
-
-    .points-col {
-      color: #00f0ff;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    /* Isticanje TOP 3 Mesta */
-    .rank-1 { background-color: rgba(255, 215, 0, 0.08); }
-    .rank-1 .player-col { color: #ffd700; }
-    .rank-1 td:first-child::before { content: "🥇 "; }
-
-    .rank-2 { background-color: rgba(192, 192, 192, 0.08); }
-    .rank-2 .player-col { color: #c0c0c0; }
-    .rank-2 td:first-child::before { content: "🥈 "; }
-
-    .rank-3 { background-color: rgba(205, 127, 50, 0.08); }
-    .rank-3 .player-col { color: #cd7f32; }
-    .rank-3 td:first-child::before { content: "🥉 "; }
+    /* Stil za Rang Listu */
+    .loader { text-align: center; padding: 20px; color: #00f0ff; }
+    .ranking-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .ranking-table th { background: #1a2332; color: #00f0ff; padding: 10px; border-bottom: 2px solid #2a3b53; }
+    .ranking-table td { padding: 10px; border-bottom: 1px solid #1e2d42; text-align: center; }
+    .player-name { text-align: left; font-weight: bold; color: #fff; }
+    .rank-1 { background: rgba(255, 215, 0, 0.1); }
+    .rank-2 { background: rgba(192, 192, 192, 0.1); }
+    .rank-3 { background: rgba(205, 127, 50, 0.1); }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Meni za prebacivanje tabova -->
-    <div class="nav-tabs">
-      <button class="tab-btn active" onclick="openTab('predictions-tab', this)">Predikcije</button>
-      <button class="tab-btn" onclick="openTab('ranking-tab', this)">Rang Lista</button>
-    </div>
-
-    <!-- TAB 1: Predikcije (Tvoj postojeći deo) -->
-    <div id="predictions-tab" class="tab-content active">
-      <h2>Unos Predikcija</h2>
-      <p style="text-align: center; color: #8b949e;">Ovde se nalazi tvoja postojeća forma za predikcije.</p>
-    </div>
-
-    <!-- TAB 2: Rang Lista -->
-    <div id="ranking-tab" class="tab-content">
-      <h2>Leaderboard</h2>
-      
-      <div id="ranking-loader" class="loader">Učitavanje podataka sa servera...</div>
-
-      <div class="table-responsive">
-        <table id="ranking-table" style="display: none;">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th style="text-align: left;">Player</th>
-              <th>PTS</th>
-              <th>Exact (3p)</th>
-              <th>Outcome (1p)</th>
-              <th>Played</th>
-            </tr>
-          </thead>
-          <tbody id="ranking-body">
-            <!-- Redovi se dinamički ubacuju iz skripte -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <!-- DUGMAD ZA PREBACIVANJE -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('predictions-tab', this)">Predikcije</button>
+    <button class="tab-btn" onclick="switchTab('ranking-tab', this)">Rang Lista</button>
   </div>
 
-  <script>
-    // URL tvog objavljenog Google Apps Script Web App-a
-    const WEB_APP_URL = 'TVOJ_WEB_APP_URL_OVDE';
+  <!-- TAB 1: PREDIKCIJE (TVOJ STARI HTML) -->
+  <div id="predictions-tab" class="tab-content active">
+    
+    <!-- ======================================================== -->
+    <!--  OVDE VRATI / NALEPI CEO TVOJ STARI HTML KOD ZA FORMU   -->
+    <!-- ======================================================== -->
 
-    // Logika za prebacivanje tabova
-    function openTab(tabId, btnElement) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  </div>
+
+  <!-- TAB 2: RANG LISTA -->
+  <div id="ranking-tab" class="tab-content">
+    <h2 style="text-align: center; color: #fff; margin-bottom: 15px;">Leaderboard</h2>
+    <div id="ranking-loader" class="loader">Učitavanje rang liste...</div>
+    
+    <table id="ranking-table" class="ranking-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th style="text-align: left;">Player</th>
+          <th>PTS</th>
+          <th>Exact (3p)</th>
+          <th>Outcome (1p)</th>
+          <th>Played</th>
+        </tr>
+      </thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
+  </div>
+
+  <!-- TVOJE STARE SKRIPTE ZA SLANJE PREDIKCIJA IDU OVDE -->
+  <script>
+    // TVOJ STARI JAVASCRIPT KOD ZA SLANJE PREDIKCIJA
+  </script>
+
+  <!-- LOGIKA ZA RANG LISTU -->
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/TVOJ_SCRIPT_ID/exec'; // Zamenjaj sa tvojim URL-om
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
       document.getElementById(tabId).classList.add('active');
-      btnElement.classList.add('active');
+      btn.classList.add('active');
 
-      // Ako je kliknuto na Rang Listu, povuci najnovije podatke
       if (tabId === 'ranking-tab') {
-        loadRankingData();
+        loadRanking();
       }
     }
 
-    // Povlačenje podataka sa Google Sheet-a
-    function loadRankingData() {
-      const loader = document.getElementById('ranking-loader');
-      const table = document.getElementById('ranking-table');
-      
-      loader.style.display = 'block';
-      loader.innerText = 'Učitavanje rang liste...';
-      table.style.display = 'none';
-
-      // Provera da li se pokreće unutar Apps Script HTML servisa ili eksternog sajta
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(renderTable)
-          .withFailureHandler(handleError)
-          .getRankingData();
-      } else {
-        fetch(`${WEB_APP_URL}?action=ranking`)
-          .then(res => res.json())
-          .then(data => {
-            if (data.success && data.ranking) {
-              renderTable(data.ranking);
-            } else {
-              handleError('Nije moguće dohvatiti podatke.');
-            }
-          })
-          .catch(err => handleError(err));
-      }
-    }
-
-    // Prikaz podataka u tabeli
-    function renderTable(data) {
+    function loadRanking() {
       const loader = document.getElementById('ranking-loader');
       const table = document.getElementById('ranking-table');
       const tbody = document.getElementById('ranking-body');
 
-      tbody.innerHTML = '';
-
-      if (!data || data.length === 0) {
-        loader.innerText = 'Trenutno nema unetih rezultata.';
-        return;
-      }
-
-      data.forEach(item => {
-        const tr = document.createElement('tr');
-        
-        if (item.rank === 1) tr.classList.add('rank-1');
-        else if (item.rank === 2) tr.classList.add('rank-2');
-        else if (item.rank === 3) tr.classList.add('rank-3');
-
-        tr.innerHTML = `
-          <td><strong>${item.rank}</strong></td>
-          <td class="player-col">${item.player}</td>
-          <td class="points-col">${item.points}</td>
-          <td>${item.exactScores}</td>
-          <td>${item.correctOutcomes}</td>
-          <td>${item.matchesPlayed}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      loader.style.display = 'none';
-      table.style.display = 'table';
-    }
-
-    function handleError(err) {
-      const loader = document.getElementById('ranking-loader');
       loader.style.display = 'block';
-      loader.innerText = 'Greška pri osvežavanju tabele.';
-      console.error(err);
+      table.style.display = 'none';
+
+      fetch(`${WEB_APP_URL}?action=ranking`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.ranking) {
+            tbody.innerHTML = '';
+            data.ranking.forEach(row => {
+              const tr = document.createElement('tr');
+              if (row.rank === 1) tr.classList.add('rank-1');
+              if (row.rank === 2) tr.classList.add('rank-2');
+              if (row.rank === 3) tr.classList.add('rank-3');
+
+              tr.innerHTML = `
+                <td><strong>${row.rank}</strong></td>
+                <td class="player-name">${row.player}</td>
+                <td style="color:#00f0ff; font-weight:bold;">${row.points}</td>
+                <td>${row.exactScores}</td>
+                <td>${row.correctOutcomes}</td>
+                <td>${row.matchesPlayed}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+            loader.style.display = 'none';
+            table.style.display = 'table';
+          }
+        })
+        .catch(err => {
+          loader.innerText = 'Greška pri učitavanju tabele.';
+          console.error(err);
+        });
     }
   </script>
 </body>
