@@ -5,65 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prediction League</title>
   <style>
+    :root {
+      --bg-color: #0b0e14;
+      --card-bg: #151a21;
+      --accent-color: #00f0ff;
+      --text-main: #ffffff;
+      --text-dim: #9aa5b1;
+      --border-color: #202936;
+      --input-bg: #0b0e14;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: #0b0f19;
-      color: #c9d1d9;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
-      padding: 15px;
+      padding: 20px 10px;
       min-height: 100vh;
     }
 
-    .container {
+    .main-container {
       width: 100%;
-      max-width: 650px;
-      background: #121824;
-      border: 1px solid #232d3f;
-      border-radius: 12px;
+      max-width: 500px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    /* Navigation Tabs */
-    .nav-tabs {
+    /* Tabs Styling */
+    .tabs-header {
       display: flex;
-      gap: 10px;
+      background-color: var(--bg-color);
+      padding: 4px;
+      border-radius: 10px;
       margin-bottom: 20px;
-      border-bottom: 1px solid #232d3f;
-      padding-bottom: 15px;
+      border: 1px solid var(--border-color);
     }
 
     .tab-btn {
       flex: 1;
-      padding: 12px;
-      background-color: #1a2332;
-      color: #8b949e;
-      border: 1px solid #2a3b53;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 14px;
       border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
       cursor: pointer;
-      transition: all 0.25s ease;
-      text-align: center;
-    }
-
-    .tab-btn:hover {
-      background-color: #243147;
-      color: #ffffff;
+      transition: all 0.2s ease;
     }
 
     .tab-btn.active {
-      background-color: #00f0ff;
-      color: #0b0f19;
-      border-color: #00f0ff;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+      background-color: var(--accent-color);
+      color: #000000;
+      box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
     }
 
     .tab-content {
@@ -74,225 +78,190 @@
       display: block;
     }
 
-    /* Form & Input Elements */
+    /* Original Form Styling */
     .form-group {
       margin-bottom: 15px;
     }
 
     label {
       display: block;
-      margin-bottom: 6px;
-      font-size: 13px;
-      color: #00f0ff;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-color);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      margin-bottom: 6px;
     }
 
     input[type="text"], select {
       width: 100%;
       padding: 12px;
-      background: #1a2332;
-      border: 1px solid #2a3b53;
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      color: #ffffff;
+      color: var(--text-main);
       font-size: 14px;
       outline: none;
     }
 
     input[type="text"]:focus, select:focus {
-      border-color: #00f0ff;
+      border-color: var(--accent-color);
     }
 
-    /* Match Card Layout */
     .match-card {
-      background: #161f2e;
-      border: 1px solid #232d3f;
-      border-radius: 8px;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
       padding: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .match-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 10px;
       text-align: center;
+      margin-bottom: 8px;
+      color: var(--text-main);
     }
 
     .match-inputs {
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
     }
 
-    .outcome-select {
+    .match-inputs select {
       flex: 1;
     }
 
-    .score-input {
+    .match-inputs input {
       flex: 1;
       text-align: center;
     }
 
-    /* Submit Button */
     .submit-btn {
       width: 100%;
       padding: 14px;
-      background: #00f0ff;
-      color: #0b0f19;
+      background-color: var(--accent-color);
+      color: #000;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 15px;
       cursor: pointer;
-      margin-top: 15px;
-      transition: background 0.2s;
+      margin-top: 10px;
     }
 
-    .submit-btn:hover {
-      background: #00c4d4;
-    }
-
-    /* Leaderboard Table */
-    .table-container {
+    /* Leaderboard Table Styling */
+    .table-wrapper {
       overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid #232d3f;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: center;
-      background-color: #121824;
     }
 
     th {
-      background-color: #1a2332;
-      color: #00f0ff;
-      padding: 12px 8px;
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #2a3b53;
+      color: var(--accent-color);
+      padding: 10px 5px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     td {
-      padding: 10px 8px;
-      border-bottom: 1px solid #1e2d42;
+      padding: 10px 5px;
       font-size: 13px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .player-col {
       text-align: left;
       font-weight: 600;
-      color: #ffffff;
     }
 
     .pts-col {
-      color: #00f0ff;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .loader {
-      text-align: center;
-      padding: 25px;
-      color: #00f0ff;
-      font-size: 14px;
+      color: var(--accent-color);
+      font-weight: 700;
     }
 
     .status-msg {
-      margin-top: 10px;
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .alert {
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
+      margin-bottom: 10px;
       font-size: 13px;
       text-align: center;
       display: none;
     }
 
-    .status-msg.error {
-      background: rgba(255, 68, 68, 0.1);
-      color: #ff4444;
-      border: 1px solid #ff4444;
-    }
-
-    .status-msg.success {
-      background: rgba(0, 240, 255, 0.1);
-      color: #00f0ff;
-      border: 1px solid #00f0ff;
-    }
-
-    /* Top 3 Highlighting */
-    .rank-1 { background: rgba(255, 215, 0, 0.08); }
-    .rank-1 .player-col { color: #ffd700; }
-    .rank-2 { background: rgba(192, 192, 192, 0.08); }
-    .rank-2 .player-col { color: #c0c0c0; }
-    .rank-3 { background: rgba(205, 127, 50, 0.08); }
-    .rank-3 .player-col { color: #cd7f32; }
+    .alert.success { background: rgba(0, 240, 255, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); }
+    .alert.error { background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid #ff4444; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
+  <div class="main-container">
+    <!-- Tabs -->
+    <div class="tabs-header">
       <button class="tab-btn active" onclick="switchTab('predictions-tab', this)">Predictions</button>
       <button class="tab-btn" onclick="switchTab('leaderboard-tab', this)">Leaderboard</button>
     </div>
 
-    <!-- TAB 1: PREDICTIONS FORM -->
+    <!-- TAB 1: PREDICTIONS -->
     <div id="predictions-tab" class="tab-content active">
       <div class="form-group">
-        <label for="player-name">Discord Username</label>
-        <input type="text" id="player-name" placeholder="Enter your Discord username (e.g. Bojan)" required>
+        <label>Discord Username</label>
+        <input type="text" id="player-name" placeholder="Enter username">
       </div>
 
       <div class="form-group">
-        <label for="round-select">Round</label>
+        <label>Round</label>
         <select id="round-select">
           <option value="Round 1">Round 1</option>
         </select>
       </div>
 
-      <div id="matches-container">
-        <!-- Matches will be generated automatically -->
-      </div>
+      <div id="matches-list"></div>
 
-      <div id="submit-status" class="status-msg"></div>
-      <button type="button" class="submit-btn" onclick="submitPredictions()">Submit Predictions</button>
+      <div id="alert-box" class="alert"></div>
+      <button class="submit-btn" onclick="submitData()">Submit Predictions</button>
     </div>
 
     <!-- TAB 2: LEADERBOARD -->
     <div id="leaderboard-tab" class="tab-content">
-      <div id="leaderboard-loader" class="loader">Loading leaderboard data...</div>
-      
-      <div class="table-container">
-        <table id="leaderboard-table" style="display: none;">
+      <div id="status-text" class="status-msg">Loading ranking data...</div>
+
+      <div class="table-wrapper">
+        <table id="ranking-table" style="display: none;">
           <thead>
             <tr>
-              <th>Rank</th>
+              <th>#</th>
               <th style="text-align: left;">Player</th>
               <th>PTS</th>
-              <th>Exact (3p)</th>
-              <th>Outcome (1p)</th>
-              <th>Played</th>
+              <th>Exact</th>
+              <th>Out.</th>
+              <th>Pld</th>
             </tr>
           </thead>
-          <tbody id="leaderboard-body"></tbody>
+          <tbody id="ranking-rows"></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <script>
-    // Paste your deployed Google Apps Script Web App URL here
+    // ZAMENI OVDE SA TVOJIM APPS SCRIPT WEB APP URL-OM:
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqZ-YOUR_SCRIPT_ID_HERE/exec';
 
-    // Round 1 Matches
-    const matches = [
+    const matchesList = [
       "AEK Athens vs LASK",
       "Club Brugge vs Aston Villa",
       "Borussia Dortmund vs Villarreal",
@@ -313,30 +282,28 @@
       "Slavia Praha vs Lens"
     ];
 
-    // Render matches on load
+    // Render matches form
     function renderMatches() {
-      const container = document.getElementById('matches-container');
+      const container = document.getElementById('matches-list');
       container.innerHTML = '';
-
-      matches.forEach((match, index) => {
-        const card = document.createElement('div');
-        card.className = 'match-card';
-        card.innerHTML = `
-          <div class="match-title">${match}</div>
-          <div class="match-inputs">
-            <select class="outcome-select" id="outcome-${index}">
-              <option value="1">1 (Home Win)</option>
-              <option value="X">X (Draw)</option>
-              <option value="2">2 (Away Win)</option>
-            </select>
-            <input type="text" class="score-input" id="score-${index}" placeholder="Score (e.g. 2:1)" maxlength="5">
+      matchesList.forEach((match, i) => {
+        container.innerHTML += `
+          <div class="match-card">
+            <div class="match-title">${match}</div>
+            <div class="match-inputs">
+              <select id="sign-${i}">
+                <option value="1">1</option>
+                <option value="X">X</option>
+                <option value="2">2</option>
+              </select>
+              <input type="text" id="score-${i}" placeholder="Score (2:1)" maxlength="5">
+            </div>
           </div>
         `;
-        container.appendChild(card);
       });
     }
 
-    // Switch between Predictions and Leaderboard tabs
+    // Switch Tabs
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -345,69 +312,58 @@
       btn.classList.add('active');
 
       if (tabId === 'leaderboard-tab') {
-        loadLeaderboard();
+        getLeaderboard();
       }
     }
 
-    // Submit Predictions to Google Sheet
-    function submitPredictions() {
+    // Send predictions
+    function submitData() {
       const player = document.getElementById('player-name').value.trim();
       const round = document.getElementById('round-select').value;
-      const statusDiv = document.getElementById('submit-status');
+      const alertBox = document.getElementById('alert-box');
 
       if (!player) {
-        showStatus('Please enter your Discord Username.', 'error');
+        showAlert('Please enter your Discord Username.', 'error');
         return;
       }
 
-      const predictionsData = [];
-      for (let i = 0; i < matches.length; i++) {
-        const outcome = document.getElementById(`outcome-${i}`).value;
-        let score = document.getElementById(`score-${i}`).value.trim().replace('-', ':');
+      const predictions = [];
+      for (let i = 0; i < matchesList.length; i++) {
+        const sign = document.getElementById(`sign-${i}`).value;
+        let score = document.getElementById(`score-${i}`).value.trim();
 
         if (!score) {
-          showStatus(`Please enter score prediction for: ${matches[i]}`, 'error');
+          showAlert(`Please enter score for match ${i+1}.`, 'error');
           return;
         }
 
-        predictionsData.push({
-          match: matches[i],
-          prediction: outcome,
+        predictions.push({
+          match: matchesList[i],
+          prediction: sign,
           score: score
         });
       }
 
-      showStatus('Submitting predictions, please wait...', 'success');
-
-      const payload = {
-        player: player,
-        round: round,
-        predictions: predictionsData
-      };
+      showAlert('Sending predictions...', 'success');
 
       fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ player, round, predictions })
       })
-      .then(() => {
-        showStatus('Predictions submitted successfully!', 'success');
-      })
-      .catch(err => {
-        showStatus('Error submitting predictions. Try again.', 'error');
-        console.error(err);
-      });
+      .then(() => showAlert('Predictions submitted successfully!', 'success'))
+      .catch(() => showAlert('Error submitting predictions.', 'error'));
     }
 
-    // Load Leaderboard Data
-    function loadLeaderboard() {
-      const loader = document.getElementById('leaderboard-loader');
-      const table = document.getElementById('leaderboard-table');
-      const tbody = document.getElementById('leaderboard-body');
+    // Fetch Leaderboard
+    function getLeaderboard() {
+      const statusText = document.getElementById('status-text');
+      const table = document.getElementById('ranking-table');
+      const tbody = document.getElementById('ranking-rows');
 
-      loader.style.display = 'block';
-      loader.innerText = 'Loading leaderboard data...';
+      statusText.style.display = 'block';
+      statusText.innerText = 'Loading ranking data...';
       table.style.display = 'none';
 
       fetch(`${SCRIPT_URL}?action=ranking`)
@@ -415,47 +371,39 @@
         .then(data => {
           if (data.success && data.ranking) {
             tbody.innerHTML = '';
-
-            if (data.ranking.length === 0) {
-              loader.innerText = 'No matches scored yet.';
+            if(data.ranking.length === 0) {
+              statusText.innerText = 'No scores recorded yet.';
               return;
             }
 
-            data.ranking.forEach(row => {
-              const tr = document.createElement('tr');
-              if (row.rank === 1) tr.classList.add('rank-1');
-              if (row.rank === 2) tr.classList.add('rank-2');
-              if (row.rank === 3) tr.classList.add('rank-3');
-
-              tr.innerHTML = `
-                <td><strong>${row.rank}</strong></td>
-                <td class="player-col">${row.player}</td>
-                <td class="pts-col">${row.points}</td>
-                <td>${row.exactScores}</td>
-                <td>${row.correctOutcomes}</td>
-                <td>${row.matchesPlayed}</td>
+            data.ranking.forEach(r => {
+              tbody.innerHTML += `
+                <tr>
+                  <td><strong>${r.rank}</strong></td>
+                  <td class="player-col">${r.player}</td>
+                  <td class="pts-col">${r.points}</td>
+                  <td>${r.exactScores}</td>
+                  <td>${r.correctOutcomes}</td>
+                  <td>${r.matchesPlayed}</td>
+                </tr>
               `;
-              tbody.appendChild(tr);
             });
-
-            loader.style.display = 'none';
+            statusText.style.display = 'none';
             table.style.display = 'table';
           }
         })
-        .catch(err => {
-          loader.innerText = 'Unable to load leaderboard data.';
-          console.error(err);
+        .catch(() => {
+          statusText.innerText = 'Failed to load leaderboard.';
         });
     }
 
-    function showStatus(msg, type) {
-      const statusDiv = document.getElementById('submit-status');
-      statusDiv.innerText = msg;
-      statusDiv.className = `status-msg ${type}`;
-      statusDiv.style.display = 'block';
+    function showAlert(msg, type) {
+      const alertBox = document.getElementById('alert-box');
+      alertBox.innerText = msg;
+      alertBox.className = `alert ${type}`;
+      alertBox.style.display = 'block';
     }
 
-    // Initialize matches list on load
     renderMatches();
   </script>
 </body>
