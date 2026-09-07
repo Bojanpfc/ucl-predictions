@@ -83,6 +83,46 @@ h1 {
   font-weight: 500;
 }
 
+/* Main Navigation Tabs (Predictions / Leaderboard) */
+.main-nav {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+  background: rgba(5, 12, 28, 0.6);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--border-line);
+}
+
+.main-tab {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+
+.main-tab.active {
+  background: linear-gradient(135deg, var(--accent-blue), #003db3);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 85, 255, 0.4);
+  border: 1px solid var(--accent-cyan);
+}
+
+.tab-view {
+  display: none;
+}
+
+.tab-view.active {
+  display: block;
+}
+
 /* User Card */
 .player {
   background: var(--bg-card);
@@ -90,7 +130,7 @@ h1 {
   border: 1px solid var(--border-line);
   border-radius: 18px;
   padding: 18px 20px;
-  margin: 15px 0 20px;
+  margin: 0 0 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -386,12 +426,66 @@ input[type="text"]:focus {
   margin-bottom: 10px;
 }
 
+/* Leaderboard Styling Matching Theme */
+.leaderboard-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-line);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.lb-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-cyan);
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border-line);
+}
+
+.lb-table td {
+  padding: 12px 8px;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lb-player {
+  text-align: left;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lb-pts {
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
+
+.lb-status {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
 footer {
   text-align: center;
   color: var(--text-muted);
   font-size: 12px;
   padding: 10px 0 20px;
   border-top: 1px solid var(--border-line);
+  margin-top: 20px;
 }
 
 /* Modal Pop-up Styling */
@@ -593,22 +687,54 @@ footer {
     <div class="sub">Predict match outcomes and exact scores • 1 / X / 2</div>
   </header>
 
-  <div class="player">
-    <label for="player">YOUR DISCORD NAME</label>
-    <input id="player" type="text" maxlength="50" placeholder="e.g. User#1234 or Username">
+  <!-- Navigation Tabs -->
+  <div class="main-nav">
+    <button class="main-tab active" id="tab-preds-btn" onclick="switchMainTab('preds')">PREDICTIONS</button>
+    <button class="main-tab" id="tab-lb-btn" onclick="switchMainTab('lb')">LEADERBOARD</button>
   </div>
 
-  <div class="rounds" id="roundNav"></div>
-  
-  <div class="round-header-info">
-    <div class="info" id="roundInfo"></div>
-    <div class="progress-container" id="progressInfo">0 / 0 Completed</div>
+  <!-- TAB 1: PREDICTIONS -->
+  <div id="view-predictions" class="tab-view active">
+    <div class="player">
+      <label for="player">YOUR DISCORD NAME</label>
+      <input id="player" type="text" maxlength="50" placeholder="e.g. User#1234 or Username">
+    </div>
+
+    <div class="rounds" id="roundNav"></div>
+    
+    <div class="round-header-info">
+      <div class="info" id="roundInfo"></div>
+      <div class="progress-container" id="progressInfo">0 / 0 Completed</div>
+    </div>
+
+    <div id="message" class="msg"></div>
+    <div id="matches"></div>
+    
+    <button class="submit" id="submitBtn" onclick="submitPredictions()">SUBMIT ROUND PREDICTIONS</button>
   </div>
 
-  <div id="message" class="msg"></div>
-  <div id="matches"></div>
-  
-  <button class="submit" id="submitBtn" onclick="submitPredictions()">SUBMIT ROUND PREDICTIONS</button>
+  <!-- TAB 2: LEADERBOARD -->
+  <div id="view-leaderboard" class="tab-view">
+    <div class="leaderboard-card">
+      <div id="lb-loading" class="lb-status">Loading rankings...</div>
+      
+      <div class="table-responsive">
+        <table class="lb-table" id="lb-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th style="text-align: left;">Player</th>
+              <th>PTS</th>
+              <th>Exact</th>
+              <th>Outcome</th>
+              <th>Played</th>
+            </tr>
+          </thead>
+          <tbody id="lb-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <footer>
     Outcome hit = 1 point • Exact score = 3 points total • Predictions lock after submission.
@@ -620,7 +746,6 @@ footer {
   <div class="modal-content">
     <button class="close-modal" onclick="closeModal()">&times;</button>
     
-    <!-- Element koji se snima u PNG -->
     <div id="ticketToCapture" class="ticket-card">
       <div class="ticket-header">
         <div class="ucl-badge">✦ OFFICIAL PREDICTION TICKET ✦</div>
@@ -662,6 +787,72 @@ function esc(s) {
 
 function isOpen(round) {
   return Date.now() >= new Date(roundUnlockDates[round]).getTime();
+}
+
+/* Main Tab Switching */
+function switchMainTab(type) {
+  const predsView = document.getElementById('view-predictions');
+  const lbView = document.getElementById('view-leaderboard');
+  const predsBtn = document.getElementById('tab-preds-btn');
+  const lbBtn = document.getElementById('tab-lb-btn');
+
+  if (type === 'preds') {
+    predsView.classList.add('active');
+    lbView.classList.remove('active');
+    predsBtn.classList.add('active');
+    lbBtn.classList.remove('active');
+  } else {
+    lbView.classList.add('active');
+    predsView.classList.remove('active');
+    lbBtn.classList.add('active');
+    predsBtn.classList.remove('active');
+    fetchLeaderboard();
+  }
+}
+
+/* Fetch Leaderboard JSONP / Fetch */
+function fetchLeaderboard() {
+  const loading = document.getElementById('lb-loading');
+  const table = document.getElementById('lb-table');
+  const tbody = document.getElementById('lb-body');
+
+  loading.style.display = 'block';
+  loading.textContent = 'Loading rankings...';
+  table.style.display = 'none';
+
+  fetch(`${APPS_SCRIPT_URL}?action=ranking`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.ranking) {
+        tbody.innerHTML = '';
+        if (data.ranking.length === 0) {
+          loading.textContent = 'No scores recorded yet.';
+          return;
+        }
+
+        data.ranking.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${r.rank}</strong></td>
+            <td class="lb-player">${esc(r.player)}</td>
+            <td class="lb-pts">${r.points}</td>
+            <td>${r.exactScores}</td>
+            <td>${r.correctOutcomes}</td>
+            <td>${r.matchesPlayed}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        loading.style.display = 'none';
+        table.style.display = 'table';
+      } else {
+        loading.textContent = 'No ranking data available yet.';
+      }
+    })
+    .catch(err => {
+      loading.textContent = 'Failed to load leaderboard.';
+      console.error(err);
+    });
 }
 
 function checkServerDuplicate(player, round) {
