@@ -1,912 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCL Predictions</title>
-<!-- html2canvas biblioteka za konvertovanje tiketa u PNG sliku -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-:root {
-  --bg-dark: #030814;
-  --bg-card: rgba(13, 25, 48, 0.75);
-  --bg-card-hover: rgba(18, 35, 66, 0.85);
-  --border-line: rgba(77, 130, 224, 0.2);
-  --border-glow: rgba(0, 240, 255, 0.4);
-  --text-main: #f8fafc;
-  --text-muted: #8ea3c7;
-  --accent-blue: #0055ff;
-  --accent-cyan: #00f0ff;
-  --accent-gold: #f59e0b;
-  --success: #10b981;
-  --danger: #ef4444;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: radial-gradient(circle at 50% 0%, #0d224a 0%, #030814 65%);
-  color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  min-height: 100vh;
-  padding-bottom: 40px;
-}
-
-.wrap {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px 16px;
-}
-
-/* Header Section */
-header {
-  text-align: center;
-  padding: 30px 10px 20px;
-  position: relative;
-}
-
-.ucl-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  background: radial-gradient(circle, rgba(0,240,255,0.15) 0%, rgba(0,0,0,0) 70%);
-  border: 1px solid var(--border-glow);
-  border-radius: 50%;
-  margin-bottom: 12px;
-  box-shadow: 0 0 20px rgba(0,240,255,0.2);
-  font-size: 24px;
-}
-
-.eyebrow {
-  color: var(--accent-cyan);
-  font-size: 11px;
-  letter-spacing: 4px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 6px 0 8px;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.sub {
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-/* User Card */
-.player {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-line);
-  border-radius: 18px;
-  padding: 18px 20px;
-  margin: 15px 0 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-label {
-  display: block;
-  font-size: 11px;
-  color: var(--accent-cyan);
-  margin-bottom: 8px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-input[type="text"] {
-  width: 100%;
-  background: rgba(5, 12, 28, 0.8);
-  color: #fff;
-  border: 1px solid var(--border-line);
-  border-radius: 12px;
-  padding: 14px 16px;
-  font-size: 15px;
-  outline: none;
-  transition: all 0.25s ease;
-}
-
-input[type="text"]:focus {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
-}
-
-/* Round Navigation */
-.rounds {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 2px 14px;
-  scrollbar-width: none;
-}
-
-.rounds::-webkit-scrollbar { display: none; }
-
-.rounds button {
-  min-width: 95px;
-  border: 1px solid var(--border-line);
-  background: var(--bg-card);
-  backdrop-filter: blur(8px);
-  color: var(--text-muted);
-  border-radius: 12px;
-  padding: 11px 14px;
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.rounds button:hover:not(.locked) {
-  border-color: var(--accent-cyan);
-  color: #fff;
-}
-
-.rounds button.active {
-  background: linear-gradient(135deg, var(--accent-blue), #003db3);
-  color: #fff;
-  border-color: var(--accent-cyan);
-  box-shadow: 0 4px 15px rgba(0, 85, 255, 0.4);
-}
-
-.rounds button.locked {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Info & Progress Bar */
-.round-header-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 0 4px;
-}
-
-.info {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-.progress-container {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 4px 12px;
-  border: 1px solid var(--border-line);
-  font-size: 12px;
-  color: var(--accent-cyan);
-  font-weight: 700;
-}
-
-/* Match Cards */
-.card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-line);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  position: relative;
-  transition: all 0.25s ease;
-}
-
-.card:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(0, 240, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.card.completed {
-  border-color: rgba(16, 185, 129, 0.4);
-}
-
-.match {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 12px;
-  align-items: center;
-}
-
-.team {
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 1.3;
-  display: flex;
-  align-items: center;
-}
-
-.away { 
-  justify-content: flex-end; 
-  text-align: right; 
-}
-
-.vs {
-  font-size: 11px;
-  color: var(--accent-cyan);
-  font-weight: 900;
-  background: rgba(0, 240, 255, 0.1);
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-/* Options Pick */
-.options {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.pick {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-line);
-  background: rgba(5, 12, 28, 0.6);
-  color: var(--text-muted);
-  font-weight: 800;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.pick:hover {
-  background: rgba(0, 85, 255, 0.2);
-  color: #fff;
-}
-
-.pick.selected {
-  background: linear-gradient(135deg, var(--accent-blue), #0033a0);
-  color: white;
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 10px rgba(0, 85, 255, 0.5);
-}
-
-/* Score Row */
-.score-row {
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(5, 12, 28, 0.4);
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.08);
-}
-
-.score-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-.score-boxes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.score-input {
-  width: 48px;
-  height: 38px;
-  background: rgba(5, 12, 28, 0.9);
-  color: white;
-  border: 1px solid var(--border-line);
-  border-radius: 8px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 800;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.score-input:focus {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
-}
-
-.score-colon {
-  font-size: 16px;
-  color: var(--accent-cyan);
-  font-weight: 800;
-}
-
-/* Submit & Messages */
-.submit {
-  width: 100%;
-  border: 0;
-  border-radius: 14px;
-  background: linear-gradient(90deg, #0055ff, #00c3ff);
-  color: white;
-  font-size: 16px;
-  font-weight: 800;
-  padding: 16px;
-  margin: 15px 0 25px;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 85, 255, 0.35);
-  transition: all 0.25s ease;
-  letter-spacing: 0.5px;
-}
-
-.submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 195, 255, 0.5);
-}
-
-.submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.msg {
-  display: none;
-  text-align: center;
-  padding: 14px;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.msg.ok {
-  display: block;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid var(--success);
-  color: #6ee7b7;
-}
-
-.msg.err {
-  display: block;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid var(--danger);
-  color: #fca5a5;
-}
-
-.lockbox {
-  text-align: center;
-  padding: 35px 15px;
-  color: var(--text-muted);
-}
-
-.lockicon {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
-footer {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 12px;
-  padding: 10px 0 20px;
-  border-top: 1px solid var(--border-line);
-}
-
-/* Modal Pop-up Styling */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(2, 6, 18, 0.88);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 12px;
-  overflow-y: auto;
-}
-
-.modal-content {
-  background: #071126;
-  border: 1px solid var(--border-glow);
-  border-radius: 18px;
-  max-width: 440px;
-  width: 100%;
-  padding: 14px;
-  box-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
-  position: relative;
-  margin: auto;
-}
-
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 24px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.close-modal:hover { color: #fff; }
-
-/* Dynamic Ticket Card Ultra Compact */
-.ticket-card {
-  background: #050c1e;
-  border: 1.5px solid var(--accent-blue);
-  border-radius: 12px;
-  padding: 10px;
-  color: #fff;
-  margin-bottom: 12px;
-  width: 100%;
-}
-
-.ticket-header {
-  text-align: center;
-  border-bottom: 1px dashed var(--border-line);
-  padding-bottom: 6px;
-  margin-bottom: 6px;
-}
-
-.ticket-header .ucl-badge {
-  font-size: 8.5px;
-  color: var(--accent-cyan);
-  letter-spacing: 1.5px;
-  font-weight: 800;
-}
-
-.ticket-header h3 {
-  font-size: 15px;
-  margin: 2px 0 4px;
-  color: #fff;
-}
-
-.ticket-meta {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-.ticket-meta span {
-  color: var(--accent-cyan);
-  font-weight: 700;
-}
-
-.ticket-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.ticket-item {
-  background: rgba(13, 25, 48, 0.85);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 5px;
-  padding: 4px 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
-}
-
-.ticket-teams {
-  font-weight: 600;
-  font-size: 10.5px;
-  color: #e2e8f0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
-}
-
-.ticket-badges {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.badge-pick {
-  background: var(--accent-blue);
-  color: #fff;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 9.5px;
-}
-
-.badge-score {
-  background: rgba(0, 240, 255, 0.15);
-  color: var(--accent-cyan);
-  border: 1px solid var(--accent-cyan);
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 9.5px;
-}
-
-.ticket-footer {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px dashed var(--border-line);
-  display: flex;
-  justify-content: space-between;
-  font-size: 8.5px;
-  color: var(--text-muted);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn-download {
-  flex: 1;
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 800;
-  cursor: pointer;
-  font-size: 12.5px;
-  transition: all 0.2s ease;
-}
-
-.btn-download:hover { opacity: 0.9; }
-
-.btn-close-sec {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 12.5px;
-}
-
-@media(max-width: 560px) {
-  h1 { font-size: 24px; }
-  .team { font-size: 13px; }
-  .match { gap: 6px; }
-  .score-row { flex-direction: column; gap: 8px; align-items: flex-start; }
-  .score-boxes { width: 100%; justify-content: space-between; }
-  .score-input { width: 45%; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction League & Leaderboard</title>
+  <style>
+    /* Osnovni reset i tamna tema */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Navigaciona dugmad za prebacivanje tabova */
+    .nav-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 12px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background-color: #21262d;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tab-btn:hover {
+      background-color: #30363d;
+      color: #f0f6fc;
+    }
+
+    .tab-btn.active {
+      background-color: #00f0ff;
+      color: #0d1117;
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Prikaz i skrivanje sekcija */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Stilovi za Rang Listu */
+    h2 {
+      color: #f0f6fc;
+      margin-bottom: 16px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .loader {
+      text-align: center;
+      padding: 30px;
+      color: #00f0ff;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      background-color: #0d1117;
+    }
+
+    th {
+      background-color: #161b22;
+      color: #58a6ff;
+      padding: 14px 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #30363d;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #21262d;
+      font-size: 14px;
+    }
+
+    tr:hover {
+      background-color: #161b22;
+    }
+
+    .player-col {
+      text-align: left;
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+
+    .points-col {
+      color: #00f0ff;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    /* Isticanje TOP 3 Mesta */
+    .rank-1 { background-color: rgba(255, 215, 0, 0.08); }
+    .rank-1 .player-col { color: #ffd700; }
+    .rank-1 td:first-child::before { content: "🥇 "; }
+
+    .rank-2 { background-color: rgba(192, 192, 192, 0.08); }
+    .rank-2 .player-col { color: #c0c0c0; }
+    .rank-2 td:first-child::before { content: "🥈 "; }
+
+    .rank-3 { background-color: rgba(205, 127, 50, 0.08); }
+    .rank-3 .player-col { color: #cd7f32; }
+    .rank-3 td:first-child::before { content: "🥉 "; }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="ucl-logo">⚽</div>
-    <div class="eyebrow">✦ UEFA CHAMPIONS LEAGUE ✦</div>
-    <h1>UCL PREDICTIONS</h1>
-    <div class="sub">Predict match outcomes and exact scores • 1 / X / 2</div>
-  </header>
 
-  <div class="player">
-    <label for="player">YOUR DISCORD NAME</label>
-    <input id="player" type="text" maxlength="50" placeholder="e.g. User#1234 or Username">
-  </div>
+  <div class="container">
+    <!-- Meni za prebacivanje tabova -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="openTab('predictions-tab', this)">Predikcije</button>
+      <button class="tab-btn" onclick="openTab('ranking-tab', this)">Rang Lista</button>
+    </div>
 
-  <div class="rounds" id="roundNav"></div>
-  
-  <div class="round-header-info">
-    <div class="info" id="roundInfo"></div>
-    <div class="progress-container" id="progressInfo">0 / 0 Completed</div>
-  </div>
+    <!-- TAB 1: Predikcije (Tvoj postojeći deo) -->
+    <div id="predictions-tab" class="tab-content active">
+      <h2>Unos Predikcija</h2>
+      <p style="text-align: center; color: #8b949e;">Ovde se nalazi tvoja postojeća forma za predikcije.</p>
+    </div>
 
-  <div id="message" class="msg"></div>
-  <div id="matches"></div>
-  
-  <button class="submit" id="submitBtn" onclick="submitPredictions()">SUBMIT ROUND PREDICTIONS</button>
-
-  <footer>
-    Outcome hit = 1 point • Exact score = 3 points total • Predictions lock after submission.
-  </footer>
-</div>
-
-<!-- POP-UP MODAL TIKET -->
-<div id="ticketModal" class="modal-overlay">
-  <div class="modal-content">
-    <button class="close-modal" onclick="closeModal()">&times;</button>
-    
-    <!-- Element koji se snima u PNG -->
-    <div id="ticketToCapture" class="ticket-card">
-      <div class="ticket-header">
-        <div class="ucl-badge">✦ OFFICIAL PREDICTION TICKET ✦</div>
-        <h3>UEFA CHAMPIONS LEAGUE</h3>
-        <div class="ticket-meta">
-          <div>User: <span id="modalUser"></span></div>
-          <div>Round: <span id="modalRound"></span></div>
-        </div>
-      </div>
+    <!-- TAB 2: Rang Lista -->
+    <div id="ranking-tab" class="tab-content">
+      <h2>Leaderboard</h2>
       
-      <div class="ticket-grid" id="modalMatches"></div>
+      <div id="ranking-loader" class="loader">Učitavanje podataka sa servera...</div>
 
-      <div class="ticket-footer">
-        <div>Date: <span id="modalDate"></span></div>
-        <div>Verified Submission ✔</div>
+      <div class="table-responsive">
+        <table id="ranking-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th style="text-align: left;">Player</th>
+              <th>PTS</th>
+              <th>Exact (3p)</th>
+              <th>Outcome (1p)</th>
+              <th>Played</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-body">
+            <!-- Redovi se dinamički ubacuju iz skripte -->
+          </tbody>
+        </table>
       </div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-download" onclick="downloadTicketPNG()">📥 Download Ticket (PNG)</button>
-      <button class="btn-close-sec" onclick="closeModal()">Close</button>
     </div>
   </div>
-</div>
 
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxt1iXHzb3F4oL1M0eHHal-Oc7MiQgkrFHTOfnkYlMabacE7Fjf9akFZyQ4n056BMr1/exec";
+  <script>
+    // URL tvog objavljenog Google Apps Script Web App-a
+    const WEB_APP_URL = 'TVOJ_WEB_APP_URL_OVDE';
 
-const rounds = {"1":[["AEK Athens","LASK"],["Club Brugge","Aston Villa"],["Borussia Dortmund","Villarreal"],["Porto","Manchester City"],["Lille","Real Betis"],["Real Madrid","Inter"],["Barcelona","Feyenoord"],["Stuttgart","Viking"],["Liverpool","Atlético de Madrid"],["Paris Saint-Germain","Slovan Bratislava"],["Sporting CP","Galatasaray"],["Napoli","Arsenal"],["Fenerbahçe","Roma"],["PSV Eindhoven","Shakhtar Donetsk"],["Como","Leipzig"],["Bayern München","Bodø/Glimt"],["Manchester United","Sabah"],["Slavia Praha","Lens"]],"2":[["Lens","Sporting CP"],["Sabah","Slavia Praha"],["Arsenal","Lille"],["Atlético de Madrid","Manchester United"],["Inter","Club Brugge"],["Galatasaray","Barcelona"],["Leipzig","PSV Eindhoven"],["Viking","Bayern München"],["Villarreal","Napoli"],["Feyenoord","Como"],["LASK","Liverpool"],["Roma","Real Madrid"],["Aston Villa","Fenerbahçe"],["Shakhtar Donetsk","AEK Athens"],["Bodø/Glimt","Borussia Dortmund"],["Manchester City","Paris Saint-Germain"],["Real Betis","Porto"],["Slovan Bratislava","Stuttgart"]],"3":[["Fenerbahçe","Slavia Praha"],["Sabah","Borussia Dortmund"],["Roma","Slovan Bratislava"],["Porto","PSV Eindhoven"],["Liverpool","Villarreal"],["Manchester City","AEK Athens"],["Paris Saint-Germain","Barcelona"],["Napoli","Bodø/Glimt"],["Stuttgart","Atlético de Madrid"],["Como","Manchester United"],["Lille","Galatasaray"],["Aston Villa","Viking"],["Club Brugge","Lens"],["Bayern München","Arsenal"],["Inter","Shakhtar Donetsk"],["Real Madrid","Leipzig"],["Real Betis","Feyenoord"],["Sporting CP","LASK"]],"4":[["Shakhtar Donetsk","Sporting CP"],["Galatasaray","Stuttgart"],["Atlético de Madrid","Bayern München"],["Barcelona","Aston Villa"],["Feyenoord","Inter"],["Bodø/Glimt","Lille"],["LASK","Slovan Bratislava"],["Manchester United","Roma"],["Villarreal","Paris Saint-Germain"],["AEK Athens","Real Madrid"],["Fenerbahçe","Liverpool"],["Borussia Dortmund","Real Betis"],["Porto","Napoli"],["PSV Eindhoven","Club Brugge"],["Leipzig","Manchester City"],["Lens","Como"],["Slavia Praha","Arsenal"],["Viking","Sabah"]],"5":[["Bodø/Glimt","LASK"],["Galatasaray","Aston Villa"],["Arsenal","Borussia Dortmund"],["Como","AEK Athens"],["Feyenoord","Porto"],["Manchester City","Napoli"],["Leipzig","Lens"],["Real Madrid","PSV Eindhoven"],["Slovan Bratislava","Real Betis"],["Sabah","Barcelona"],["Slavia Praha","Villarreal"],["Atlético de Madrid","Viking"],["Club Brugge","Liverpool"],["Inter","Stuttgart"],["Shakhtar Donetsk","Fenerbahçe"],["Lille","Bayern München"],["Paris Saint-Germain","Roma"],["Sporting CP","Manchester United"]],"6":[["Viking","Feyenoord"],["Villarreal","Sabah"],["AEK Athens","Galatasaray"],["Roma","Sporting CP"],["Aston Villa","Paris Saint-Germain"],["Barcelona","Manchester City"],["Bayern München","Slavia Praha"],["Manchester United","Leipzig"],["Napoli","Club Brugge"],["Real Betis","Como"],["Slovan Bratislava","Shakhtar Donetsk"],["Arsenal","Real Madrid"],["Borussia Dortmund","Inter"],["LASK","Fenerbahçe"],["Liverpool","Porto"],["PSV Eindhoven","Atlético de Madrid"],["Lens","Bodø/Glimt"],["Stuttgart","Lille"]],"7":[["Bodø/Glimt","Atlético de Madrid"],["Galatasaray","Feyenoord"],["AEK Athens","Roma"],["Aston Villa","Borussia Dortmund"],["Inter","Liverpool"],["Porto","Slavia Praha"],["Lille","Slovan Bratislava"],["Real Madrid","LASK"],["Stuttgart","Club Brugge"],["Fenerbahçe","Villarreal"],["Sabah","Napoli"],["Como","Paris Saint-Germain"],["Manchester United","Bayern München"],["Leipzig","Shakhtar Donetsk"],["Lens","Manchester City"],["Real Betis","Arsenal"],["Sporting CP","Barcelona"],["Viking","PSV Eindhoven"]],"8":[["Arsenal","Sabah"],["Roma","Lille"],["Atlético de Madrid","Fenerbahçe"],["Borussia Dortmund","AEK Athens"],["Club Brugge","Bodø/Glimt"],["Bayern München","Real Betis"],["Barcelona","Como"],["Shakhtar Donetsk","Real Madrid"],["Feyenoord","Leipzig"],["LASK","Porto"],["Liverpool","Lens"],["Manchester City","Sporting CP"],["Paris Saint-Germain","Galatasaray"],["PSV Eindhoven","Stuttgart"],["Slavia Praha","Aston Villa"],["Napoli","Viking"],["Villarreal","Manchester United"],["Slovan Bratislava","Inter"]]};
-const roundDates = {"1":"8–10 September 2026","2":"13–14 October 2026","3":"20–21 October 2026","4":"3–4 November 2026","5":"24–25 November 2026","6":"8–9 December 2026","7":"19–20 January 2027","8":"27 January 2027"};
-const roundUnlockDates = {"1":"2026-09-06T18:45:00+02:00","2":"2026-10-11T18:45:00+02:00","3":"2026-10-18T18:45:00+02:00","4":"2026-11-01T18:45:00+01:00","5":"2026-11-22T18:45:00+01:00","6":"2026-12-06T18:45:00+01:00","7":"2027-01-17T18:45:00+01:00","8":"2027-01-25T21:00:00+01:00"};
+    // Logika za prebacivanje tabova
+    function openTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-let currentRound = 1;
-const selections = {};
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-}
-
-function isOpen(round) {
-  return Date.now() >= new Date(roundUnlockDates[round]).getTime();
-}
-
-function checkServerDuplicate(player, round) {
-  return new Promise(function(resolve) {
-    const callback = 'uclDuplicateCheck_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-    const script = document.createElement('script');
-    let finished = false;
-
-    function cleanup() {
-      if (script.parentNode) script.parentNode.removeChild(script);
-      try { delete window[callback]; } catch(e) {}
+      // Ako je kliknuto na Rang Listu, povuci najnovije podatke
+      if (tabId === 'ranking-tab') {
+        loadRankingData();
+      }
     }
 
-    function finish(value) {
-      if (finished) return;
-      finished = true;
-      cleanup();
-      resolve(!!value);
+    // Povlačenje podataka sa Google Sheet-a
+    function loadRankingData() {
+      const loader = document.getElementById('ranking-loader');
+      const table = document.getElementById('ranking-table');
+      
+      loader.style.display = 'block';
+      loader.innerText = 'Učitavanje rang liste...';
+      table.style.display = 'none';
+
+      // Provera da li se pokreće unutar Apps Script HTML servisa ili eksternog sajta
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(renderTable)
+          .withFailureHandler(handleError)
+          .getRankingData();
+      } else {
+        fetch(`${WEB_APP_URL}?action=ranking`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.ranking) {
+              renderTable(data.ranking);
+            } else {
+              handleError('Nije moguće dohvatiti podatke.');
+            }
+          })
+          .catch(err => handleError(err));
+      }
     }
 
-    window[callback] = function(data) { finish(data && data.duplicate === true); };
-    script.src = APPS_SCRIPT_URL + '?player=' + encodeURIComponent(player) + '&round=' + encodeURIComponent('Round ' + round) + '&callback=' + encodeURIComponent(callback);
-    script.onerror = function() { finish(false); };
-    document.body.appendChild(script);
-    setTimeout(function() { finish(false); }, 8000);
-  });
-}
+    // Prikaz podataka u tabeli
+    function renderTable(data) {
+      const loader = document.getElementById('ranking-loader');
+      const table = document.getElementById('ranking-table');
+      const tbody = document.getElementById('ranking-body');
 
-function renderNav() {
-  const nav=document.getElementById('roundNav');
-  nav.innerHTML='';
-  for(let r=1;r<=8;r++) {
-    const b=document.createElement('button');
-    b.className=(r===currentRound?'active ':'')+(isOpen(r)?'':'locked');
-    b.textContent='ROUND '+r+(isOpen(r)?'':' 🔒');
-    b.onclick=()=>{currentRound=r;render();};
-    nav.appendChild(b);
-  }
-}
+      tbody.innerHTML = '';
 
-function updateProgress() {
-  if(!isOpen(currentRound)) {
-    document.getElementById('progressInfo').style.display = 'none';
-    return;
-  }
-  document.getElementById('progressInfo').style.display = 'block';
-  const total = rounds[currentRound].length;
-  let done = 0;
-  for(let i=0; i<total; i++) {
-    const p = selections[currentRound+'_'+i];
-    const score = scoreFor(i);
-    if(p && validScore(score)) done++;
-  }
-  document.getElementById('progressInfo').textContent = `${done} / ${total} Filled`;
-}
+      if (!data || data.length === 0) {
+        loader.innerText = 'Trenutno nema unetih rezultata.';
+        return;
+      }
 
-function render() {
-  renderNav();
-  const open=isOpen(currentRound);
-  const info=document.getElementById('roundInfo');
-  info.textContent='Round '+currentRound+' • '+roundDates[currentRound]+' • '+(open?'OPEN':'LOCKED');
-  const box=document.getElementById('matches');
-  box.innerHTML='';
-  const btn=document.getElementById('submitBtn');
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        
+        if (item.rank === 1) tr.classList.add('rank-1');
+        else if (item.rank === 2) tr.classList.add('rank-2');
+        else if (item.rank === 3) tr.classList.add('rank-3');
 
-  updateProgress();
+        tr.innerHTML = `
+          <td><strong>${item.rank}</strong></td>
+          <td class="player-col">${item.player}</td>
+          <td class="points-col">${item.points}</td>
+          <td>${item.exactScores}</td>
+          <td>${item.correctOutcomes}</td>
+          <td>${item.matchesPlayed}</td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-  if(!open) {
-    box.innerHTML='<div class="card lockbox"><div class="lockicon">🔒</div><b>Round '+currentRound+' is locked</b><br><br>It will open automatically 2 days before the round starts.</div>';
-    btn.disabled=true; return;
-  }
-  btn.disabled=false;
-
-  rounds[currentRound].forEach((m,i)=> {
-    const key=currentRound+'_'+i;
-    const selected=selections[key]||'';
-    const score = scoreFor(i);
-    const isCompleted = selected && validScore(score);
-
-    const card=document.createElement('div');
-    card.className='card' + (isCompleted ? ' completed' : '');
-    card.innerHTML=`
-    <div class="match">
-      <div class="team"><span>${esc(m[0])}</span></div>
-      <div class="vs">VS</div>
-      <div class="team away"><span>${esc(m[1])}</span></div>
-    </div>
-    <div class="options">
-      <button class="pick ${selected==='1'?'selected':''}" onclick="pick(${i},'1')">1</button>
-      <button class="pick ${selected==='X'?'selected':''}" onclick="pick(${i},'X')">X</button>
-      <button class="pick ${selected==='2'?'selected':''}" onclick="pick(${i},'2')">2</button>
-    </div>
-    <div class="score-row">
-      <span class="score-label">EXACT SCORE</span>
-      <div class="score-boxes">
-        <input class="score-input" id="home-score-${i}" inputmode="numeric" maxlength="2"
-               placeholder="0" value="${scoreParts(i)[0]}"
-               oninput="setScorePart(${i},'home',this.value)">
-        <span class="score-colon">:</span>
-        <input class="score-input" id="away-score-${i}" inputmode="numeric" maxlength="2"
-               placeholder="0" value="${scoreParts(i)[1]}"
-               oninput="setScorePart(${i},'away',this.value)">
-      </div>
-    </div>`;
-    box.appendChild(card);
-  });
-}
-
-function pick(i,value) {
-  selections[currentRound+'_'+i]=value;
-  render();
-}
-
-function scoreFor(i) {
-  return selections[currentRound+'_score_'+i] || '';
-}
-
-function scoreParts(i) {
-  const value=scoreFor(i).replace('-',':');
-  const parts=value.split(':');
-  return [parts[0]||'', parts[1]||''];
-}
-
-function setScorePart(i,side,value) {
-  value=String(value||'').replace(/\D/g,'').slice(0,2);
-  const parts=scoreParts(i);
-  if(side==='home') parts[0]=value;
-  else parts[1]=value;
-  selections[currentRound+'_score_'+i]=parts[0]+':'+parts[1];
-  
-  const key = currentRound+'_'+i;
-  const card = document.querySelectorAll('.card')[i];
-  if(card) {
-    if(selections[key] && validScore(parts[0]+':'+parts[1])) {
-      card.classList.add('completed');
-    } else {
-      card.classList.remove('completed');
+      loader.style.display = 'none';
+      table.style.display = 'table';
     }
-  }
-  updateProgress();
-}
 
-function validScore(value) {
-  return /^\d{1,2}:\d{1,2}$/.test(value);
-}
-
-function showMsg(text,type) {
-  const m=document.getElementById('message'); m.className='msg '+type; m.textContent=text;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* Modal Ticket Functions */
-function openTicketModal(player, roundNum, predictions) {
-  document.getElementById('modalUser').textContent = player;
-  document.getElementById('modalRound').textContent = 'Round ' + roundNum;
-  
-  const now = new Date();
-  document.getElementById('modalDate').textContent = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-  const container = document.getElementById('modalMatches');
-  container.innerHTML = '';
-
-  predictions.forEach((p, idx) => {
-    const pair = rounds[roundNum][idx];
-    const item = document.createElement('div');
-    item.className = 'ticket-item';
-    item.innerHTML = `
-      <div class="ticket-teams" title="${esc(p.match)}">
-        ${esc(pair[0])} vs ${esc(pair[1])}
-      </div>
-      <div class="ticket-badges">
-        <span class="badge-pick">${esc(p.prediction)}</span>
-        <span class="badge-score">${esc(p.score)}</span>
-      </div>
-    `;
-    container.appendChild(item);
-  });
-
-  document.getElementById('ticketModal').style.display = 'flex';
-}
-
-function closeModal() {
-  document.getElementById('ticketModal').style.display = 'none';
-}
-
-function downloadTicketPNG() {
-  const ticketElement = document.getElementById('ticketToCapture');
-
-  html2canvas(ticketElement, {
-    backgroundColor: '#050c1e',
-    scale: 2,
-    windowHeight: ticketElement.scrollHeight
-  }).then(canvas => {
-    const link = document.createElement('a');
-    const player = document.getElementById('modalUser').textContent || 'User';
-    link.download = `UCL_Ticket_Round_${currentRound}_${player}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-}
-
-async function submitPredictions() {
-  const player=(document.getElementById('player').value||'').trim();
-  if(!player) return showMsg('Please enter your Discord name.','err');
-  if(!isOpen(currentRound)) return showMsg('This round is still locked.','err');
-  const duplicate = await checkServerDuplicate(player, currentRound);
-  if(duplicate) return showMsg('You have already submitted this round.','err');
-
-  const preds=[];
-  for(let i=0;i<rounds[currentRound].length;i++) {
-    const p=selections[currentRound+'_'+i];
-    const score=scoreFor(i).replace('-',':');
-    if(!p) return showMsg('Please predict every match before submitting.','err');
-    if(!validScore(score)) return showMsg('Please enter a valid exact score for every match, e.g. 0:0.','err');
-    preds.push({match: rounds[currentRound][i][0]+' vs '+rounds[currentRound][i][1], prediction:p, score:score});
-  }
-
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true; 
-  btn.textContent='SENDING...';
-
-  const payload={player:player,round:'Round '+currentRound,predictions:preds};
-  try {
-    await fetch(APPS_SCRIPT_URL,{
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify(payload)
-    });
-    showMsg('Predictions submitted successfully!','ok');
-    
-    btn.textContent='SUBMITTED ✔';
-    
-    openTicketModal(player, currentRound, preds);
-    
-    render();
-  } catch(err) {
-    btn.disabled=false; 
-    btn.textContent='SUBMIT ROUND PREDICTIONS';
-    showMsg('Submission failed. Please try again.','err');
-  }
-}
-
-document.getElementById('player').addEventListener('input',()=>render());
-render();
-</script>
+    function handleError(err) {
+      const loader = document.getElementById('ranking-loader');
+      loader.style.display = 'block';
+      loader.innerText = 'Greška pri osvežavanju tabele.';
+      console.error(err);
+    }
+  </script>
 </body>
 </html>
