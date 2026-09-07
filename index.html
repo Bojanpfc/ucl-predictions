@@ -1,24 +1,48 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prediction League</title>
-  
-  <!-- OVDJE ZADRŽAVAŠ SVE TVOJE POSTOJEĆE STILOVE / CSS -->
   <style>
-    /* TVOJI STARI CSS STILOVI IDU OVDE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-    /* DODATAK ZA DUGMAD I TABOVE: */
+    body {
+      background-color: #0b0f19;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: #121824;
+      border: 1px solid #232d3f;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Navigation Tabs */
     .nav-tabs {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
-      justify-content: center;
+      border-bottom: 1px solid #232d3f;
+      padding-bottom: 15px;
     }
 
     .tab-btn {
-      padding: 10px 20px;
+      flex: 1;
+      padding: 12px;
       background-color: #1a2332;
       color: #8b949e;
       border: 1px solid #2a3b53;
@@ -26,76 +50,293 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .tab-btn:hover {
+      background-color: #243147;
+      color: #ffffff;
     }
 
     .tab-btn.active {
       background-color: #00f0ff;
-      color: #0d1117;
+      color: #0b0f19;
       border-color: #00f0ff;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
     }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content {
+      display: none;
+    }
 
-    /* Stil za Rang Listu */
-    .loader { text-align: center; padding: 20px; color: #00f0ff; }
-    .ranking-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .ranking-table th { background: #1a2332; color: #00f0ff; padding: 10px; border-bottom: 2px solid #2a3b53; }
-    .ranking-table td { padding: 10px; border-bottom: 1px solid #1e2d42; text-align: center; }
-    .player-name { text-align: left; font-weight: bold; color: #fff; }
-    .rank-1 { background: rgba(255, 215, 0, 0.1); }
-    .rank-2 { background: rgba(192, 192, 192, 0.1); }
-    .rank-3 { background: rgba(205, 127, 50, 0.1); }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Form & Input Elements */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #00f0ff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px;
+      background: #1a2332;
+      border: 1px solid #2a3b53;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: #00f0ff;
+    }
+
+    /* Match Card Layout */
+    .match-card {
+      background: #161f2e;
+      border: 1px solid #232d3f;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .match-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .match-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .outcome-select {
+      flex: 1;
+    }
+
+    .score-input {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #00f0ff;
+      color: #0b0f19;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #00c4d4;
+    }
+
+    /* Leaderboard Table */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #232d3f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      background-color: #121824;
+    }
+
+    th {
+      background-color: #1a2332;
+      color: #00f0ff;
+      padding: 12px 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #2a3b53;
+    }
+
+    td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #1e2d42;
+      font-size: 13px;
+    }
+
+    .player-col {
+      text-align: left;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .pts-col {
+      color: #00f0ff;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .loader {
+      text-align: center;
+      padding: 25px;
+      color: #00f0ff;
+      font-size: 14px;
+    }
+
+    .status-msg {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+
+    .status-msg.error {
+      background: rgba(255, 68, 68, 0.1);
+      color: #ff4444;
+      border: 1px solid #ff4444;
+    }
+
+    .status-msg.success {
+      background: rgba(0, 240, 255, 0.1);
+      color: #00f0ff;
+      border: 1px solid #00f0ff;
+    }
+
+    /* Top 3 Highlighting */
+    .rank-1 { background: rgba(255, 215, 0, 0.08); }
+    .rank-1 .player-col { color: #ffd700; }
+    .rank-2 { background: rgba(192, 192, 192, 0.08); }
+    .rank-2 .player-col { color: #c0c0c0; }
+    .rank-3 { background: rgba(205, 127, 50, 0.08); }
+    .rank-3 .player-col { color: #cd7f32; }
   </style>
 </head>
 <body>
 
-  <!-- DUGMAD ZA PREBACIVANJE -->
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('predictions-tab', this)">Predikcije</button>
-    <button class="tab-btn" onclick="switchTab('ranking-tab', this)">Rang Lista</button>
+  <div class="container">
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('predictions-tab', this)">Predictions</button>
+      <button class="tab-btn" onclick="switchTab('leaderboard-tab', this)">Leaderboard</button>
+    </div>
+
+    <!-- TAB 1: PREDICTIONS FORM -->
+    <div id="predictions-tab" class="tab-content active">
+      <div class="form-group">
+        <label for="player-name">Discord Username</label>
+        <input type="text" id="player-name" placeholder="Enter your Discord username (e.g. Bojan)" required>
+      </div>
+
+      <div class="form-group">
+        <label for="round-select">Round</label>
+        <select id="round-select">
+          <option value="Round 1">Round 1</option>
+        </select>
+      </div>
+
+      <div id="matches-container">
+        <!-- Matches will be generated automatically -->
+      </div>
+
+      <div id="submit-status" class="status-msg"></div>
+      <button type="button" class="submit-btn" onclick="submitPredictions()">Submit Predictions</button>
+    </div>
+
+    <!-- TAB 2: LEADERBOARD -->
+    <div id="leaderboard-tab" class="tab-content">
+      <div id="leaderboard-loader" class="loader">Loading leaderboard data...</div>
+      
+      <div class="table-container">
+        <table id="leaderboard-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th style="text-align: left;">Player</th>
+              <th>PTS</th>
+              <th>Exact (3p)</th>
+              <th>Outcome (1p)</th>
+              <th>Played</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <!-- TAB 1: PREDIKCIJE (TVOJ STARI HTML) -->
-  <div id="predictions-tab" class="tab-content active">
-    
-    <!-- ======================================================== -->
-    <!--  OVDE VRATI / NALEPI CEO TVOJ STARI HTML KOD ZA FORMU   -->
-    <!-- ======================================================== -->
-
-  </div>
-
-  <!-- TAB 2: RANG LISTA -->
-  <div id="ranking-tab" class="tab-content">
-    <h2 style="text-align: center; color: #fff; margin-bottom: 15px;">Leaderboard</h2>
-    <div id="ranking-loader" class="loader">Učitavanje rang liste...</div>
-    
-    <table id="ranking-table" class="ranking-table" style="display: none;">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th style="text-align: left;">Player</th>
-          <th>PTS</th>
-          <th>Exact (3p)</th>
-          <th>Outcome (1p)</th>
-          <th>Played</th>
-        </tr>
-      </thead>
-      <tbody id="ranking-body"></tbody>
-    </table>
-  </div>
-
-  <!-- TVOJE STARE SKRIPTE ZA SLANJE PREDIKCIJA IDU OVDE -->
   <script>
-    // TVOJ STARI JAVASCRIPT KOD ZA SLANJE PREDIKCIJA
-  </script>
+    // Paste your deployed Google Apps Script Web App URL here
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqZ-YOUR_SCRIPT_ID_HERE/exec';
 
-  <!-- LOGIKA ZA RANG LISTU -->
-  <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/TVOJ_SCRIPT_ID/exec'; // Zamenjaj sa tvojim URL-om
+    // Round 1 Matches
+    const matches = [
+      "AEK Athens vs LASK",
+      "Club Brugge vs Aston Villa",
+      "Borussia Dortmund vs Villarreal",
+      "Porto vs Manchester City",
+      "Lille vs Real Betis",
+      "Real Madrid vs Inter",
+      "Barcelona vs Feyenoord",
+      "Stuttgart vs Viking",
+      "Liverpool vs Atlético de Madrid",
+      "Paris Saint-Germain vs Slovan Bratislava",
+      "Sporting CP vs Galatasaray",
+      "Napoli vs Arsenal",
+      "Fenerbahçe vs Roma",
+      "PSV Eindhoven vs Shakhtar Donetsk",
+      "Como vs Leipzig",
+      "Bayern München vs Bodø/Glimt",
+      "Manchester United vs Sabah",
+      "Slavia Praha vs Lens"
+    ];
 
+    // Render matches on load
+    function renderMatches() {
+      const container = document.getElementById('matches-container');
+      container.innerHTML = '';
+
+      matches.forEach((match, index) => {
+        const card = document.createElement('div');
+        card.className = 'match-card';
+        card.innerHTML = `
+          <div class="match-title">${match}</div>
+          <div class="match-inputs">
+            <select class="outcome-select" id="outcome-${index}">
+              <option value="1">1 (Home Win)</option>
+              <option value="X">X (Draw)</option>
+              <option value="2">2 (Away Win)</option>
+            </select>
+            <input type="text" class="score-input" id="score-${index}" placeholder="Score (e.g. 2:1)" maxlength="5">
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Switch between Predictions and Leaderboard tabs
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -103,24 +344,83 @@
       document.getElementById(tabId).classList.add('active');
       btn.classList.add('active');
 
-      if (tabId === 'ranking-tab') {
-        loadRanking();
+      if (tabId === 'leaderboard-tab') {
+        loadLeaderboard();
       }
     }
 
-    function loadRanking() {
-      const loader = document.getElementById('ranking-loader');
-      const table = document.getElementById('ranking-table');
-      const tbody = document.getElementById('ranking-body');
+    // Submit Predictions to Google Sheet
+    function submitPredictions() {
+      const player = document.getElementById('player-name').value.trim();
+      const round = document.getElementById('round-select').value;
+      const statusDiv = document.getElementById('submit-status');
+
+      if (!player) {
+        showStatus('Please enter your Discord Username.', 'error');
+        return;
+      }
+
+      const predictionsData = [];
+      for (let i = 0; i < matches.length; i++) {
+        const outcome = document.getElementById(`outcome-${i}`).value;
+        let score = document.getElementById(`score-${i}`).value.trim().replace('-', ':');
+
+        if (!score) {
+          showStatus(`Please enter score prediction for: ${matches[i]}`, 'error');
+          return;
+        }
+
+        predictionsData.push({
+          match: matches[i],
+          prediction: outcome,
+          score: score
+        });
+      }
+
+      showStatus('Submitting predictions, please wait...', 'success');
+
+      const payload = {
+        player: player,
+        round: round,
+        predictions: predictionsData
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        showStatus('Predictions submitted successfully!', 'success');
+      })
+      .catch(err => {
+        showStatus('Error submitting predictions. Try again.', 'error');
+        console.error(err);
+      });
+    }
+
+    // Load Leaderboard Data
+    function loadLeaderboard() {
+      const loader = document.getElementById('leaderboard-loader');
+      const table = document.getElementById('leaderboard-table');
+      const tbody = document.getElementById('leaderboard-body');
 
       loader.style.display = 'block';
+      loader.innerText = 'Loading leaderboard data...';
       table.style.display = 'none';
 
-      fetch(`${WEB_APP_URL}?action=ranking`)
+      fetch(`${SCRIPT_URL}?action=ranking`)
         .then(res => res.json())
         .then(data => {
           if (data.success && data.ranking) {
             tbody.innerHTML = '';
+
+            if (data.ranking.length === 0) {
+              loader.innerText = 'No matches scored yet.';
+              return;
+            }
+
             data.ranking.forEach(row => {
               const tr = document.createElement('tr');
               if (row.rank === 1) tr.classList.add('rank-1');
@@ -129,23 +429,34 @@
 
               tr.innerHTML = `
                 <td><strong>${row.rank}</strong></td>
-                <td class="player-name">${row.player}</td>
-                <td style="color:#00f0ff; font-weight:bold;">${row.points}</td>
+                <td class="player-col">${row.player}</td>
+                <td class="pts-col">${row.points}</td>
                 <td>${row.exactScores}</td>
                 <td>${row.correctOutcomes}</td>
                 <td>${row.matchesPlayed}</td>
               `;
               tbody.appendChild(tr);
             });
+
             loader.style.display = 'none';
             table.style.display = 'table';
           }
         })
         .catch(err => {
-          loader.innerText = 'Greška pri učitavanju tabele.';
+          loader.innerText = 'Unable to load leaderboard data.';
           console.error(err);
         });
     }
+
+    function showStatus(msg, type) {
+      const statusDiv = document.getElementById('submit-status');
+      statusDiv.innerText = msg;
+      statusDiv.className = `status-msg ${type}`;
+      statusDiv.style.display = 'block';
+    }
+
+    // Initialize matches list on load
+    renderMatches();
   </script>
 </body>
 </html>
