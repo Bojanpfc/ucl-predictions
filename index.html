@@ -126,8 +126,7 @@
   </div>
 
   <script>
-    // Zamenite sa URL-om vašeg Google Apps Script-a
-    var SCRIPT_URL = "OVAJ_URL_ZAMENITE_VASIM_APPS_SCRIPT_WEB_URL-OM";
+    var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxt1iXHzb3F4oL1M0eHHal-Oc7MiQgkrFHTOfnkYlMabacE7Fjf9akFZyQ4n056BMr1/exec";
 
     function fetchRanking() {
       fetch(SCRIPT_URL + "?action=ranking")
@@ -199,7 +198,6 @@
       document.getElementById("modal").style.display = "none";
     }
 
-    // Automatsko pokretanje pri učitavanju stranice
     window.onload = fetchRanking;
   </script>
 
