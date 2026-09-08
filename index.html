@@ -463,6 +463,13 @@ input[type="text"]:focus {
   text-align: left;
   font-weight: 700;
   color: #fff;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 240, 255, 0.3);
+}
+
+.lb-player:hover {
+  color: var(--accent-cyan);
 }
 
 .lb-pts {
@@ -580,38 +587,24 @@ footer {
   gap: 3px;
 }
 
-/* =========================================================
-   TICKET ITEM - FIXED TEAM NAME OVERLAP
-   ========================================================= */
-
 .ticket-item {
   background: rgba(13, 25, 48, 0.85);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 5px;
   padding: 4px 6px;
   display: grid;
-
-  /* Teams | badges */
   grid-template-columns: minmax(0, 1fr) auto;
-
   align-items: center;
   gap: 6px;
-
   min-width: 0;
   overflow: hidden;
 }
 
-/*
-   The three parts inside the match now have their own
-   independent areas, so names can NEVER overlap.
-*/
 .ticket-teams {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-
   align-items: center;
   gap: 4px;
-
   width: 100%;
   min-width: 0;
   overflow: hidden;
@@ -621,43 +614,31 @@ footer {
   display: flex !important;
   align-items: center;
   gap: 4px;
-
   min-width: 0;
   width: 100%;
   overflow: hidden;
 }
 
-/* Home team */
 .ticket-team:first-child {
   justify-content: flex-start;
 }
 
-/* Away team */
 .ticket-team:last-child {
   justify-content: flex-end;
   text-align: right;
 }
 
-/*
-   IMPORTANT:
-   The actual name is now allowed to shrink.
-   Long names become "Manchester Sai..." instead
-   of overlapping another team.
-*/
 .ticket-team > span {
   display: block;
   min-width: 0;
   max-width: 100%;
-
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
   font-size: 9.5px;
   line-height: 1.15;
 }
 
-/* Keep logos from shrinking */
 .ticket-team .ticket-logo {
   flex: 0 0 18px;
 }
@@ -671,13 +652,11 @@ footer {
   white-space: nowrap;
 }
 
-/* Prediction + score stay completely separate */
 .ticket-badges {
   display: flex;
   gap: 3px;
   align-items: center;
   justify-content: flex-end;
-
   flex: 0 0 auto;
   min-width: max-content;
 }
@@ -702,6 +681,18 @@ footer {
   border-radius: 3px;
   font-size: 9.5px;
   white-space: nowrap;
+}
+
+.badge-hit {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.badge-miss {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+  border: 1px solid var(--danger);
 }
 
 .ticket-footer {
@@ -748,63 +739,19 @@ footer {
 }
 
 @media(max-width:560px) {
-
-  h1 {
-    font-size: 24px;
-  }
-
-  .team {
-    font-size: 13px;
-  }
-
-  .match {
-    gap: 6px;
-  }
-
-  .score-row {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-  }
-
-  .score-boxes {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .score-input {
-    width: 45%;
-  }
-
-  .ticket-item {
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 4px 5px;
-  }
-
-  .ticket-teams {
-    gap: 3px;
-  }
-
-  .ticket-team > span {
-    font-size: 8.8px;
-  }
-
-  .ticket-vs {
-    font-size: 7px;
-  }
-
-  .ticket-badges {
-    gap: 2px;
-  }
-
-  .badge-pick,
-  .badge-score {
-    font-size: 8.5px;
-    padding: 1px 4px;
-  }
+  h1 { font-size: 24px; }
+  .team { font-size: 13px; }
+  .match { gap: 6px; }
+  .score-row { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .score-boxes { width: 100%; justify-content: space-between; }
+  .score-input { width: 45%; }
+  .ticket-item { grid-template-columns: minmax(0, 1fr) auto; padding: 4px 5px; }
+  .ticket-teams { gap: 3px; }
+  .ticket-team > span { font-size: 8.8px; }
+  .ticket-vs { font-size: 7px; }
+  .ticket-badges { gap: 2px; }
+  .badge-pick, .badge-score { font-size: 8.5px; padding: 1px 4px; }
 }
-
-/* Refined UCL UI */
 
 .status-strip {
   display:flex;
@@ -963,12 +910,11 @@ footer {
   filter:drop-shadow(0 0 8px rgba(239,68,68,.35));
 }
 
-/* Leaderboard */
-
 .leaderboard-card {
+  background:linear-gradient(145deg,#08151e 0%,#0b1720 55%,#101a20 100%) !important;
+  border-color:rgba(32,210,190,.24) !important;
   padding:0;
   overflow:hidden;
-  border-color:rgba(0,240,255,.16);
 }
 
 .lb-head {
@@ -977,30 +923,31 @@ footer {
   justify-content:space-between;
   gap:15px;
   padding:22px 20px 17px;
-  background:linear-gradient(180deg,rgba(0,85,255,.12),rgba(0,0,0,0));
+  background:linear-gradient(180deg,rgba(16,167,146,.12),rgba(0,0,0,0)) !important;
 }
 
 .lb-head h2 {
   font-size:22px;
   margin:3px 0 4px;
+  color:#f2f7f6 !important;
 }
 
 .lb-head p {
   font-size:12px;
-  color:var(--text-muted);
+  color:#91a7ac !important;
 }
 
 .lb-kicker {
   font-size:9px;
   letter-spacing:2px;
   font-weight:900;
-  color:var(--accent-cyan);
+  color:#29e0d0 !important;
 }
 
 .lb-refresh {
-  border:1px solid rgba(0,240,255,.25);
-  background:rgba(0,240,255,.06);
-  color:#fff;
+  border:1px solid rgba(32,210,190,.28) !important;
+  background:rgba(32,210,190,.07) !important;
+  color:#dffaf7 !important;
   border-radius:9px;
   padding:8px 11px;
   font-weight:800;
@@ -1008,29 +955,39 @@ footer {
 }
 
 .lb-refresh:hover {
-  background:rgba(0,240,255,.12);
+  background:rgba(32,210,190,.14) !important;
 }
 
 .table-responsive {
   padding:0 8px 8px;
+  overflow-x: auto;
 }
 
 .lb-table {
+  width: 100%;
   border-collapse:separate;
   border-spacing:0;
+  text-align: center;
 }
 
 .lb-table th {
   padding:12px 9px;
-  background:rgba(3,8,20,.5);
+  background:rgba(4,12,18,.62) !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #29e0d0 !important;
+  border-bottom: 1px solid rgba(72,128,137,.22) !important;
 }
 
 .lb-table td {
   padding:13px 9px;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(72,128,137,.17) !important;
 }
 
 .lb-table tbody tr:hover td {
-  background:rgba(0,240,255,.035);
+  background:rgba(32,210,190,.035) !important;
 }
 
 .lb-table tbody tr:last-child td {
@@ -1048,14 +1005,17 @@ footer {
 }
 
 .lb-pts {
+  color:#2ee1cf !important;
   font-size:15px;
+  font-weight:800;
 }
 
 .lb-status {
+  text-align: center;
   padding:35px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
 }
-
-/* Ticket color refinement */
 
 #ticketModal .ticket-content {
   background:linear-gradient(145deg,#07151d 0%,#0a1720 52%,#101b20 100%) !important;
@@ -1120,75 +1080,6 @@ footer {
   box-shadow:0 10px 28px rgba(14,159,114,.20) !important;
 }
 
-/* Leaderboard colors */
-
-.leaderboard-card {
-  background:linear-gradient(145deg,#08151e 0%,#0b1720 55%,#101a20 100%) !important;
-  border-color:rgba(32,210,190,.24) !important;
-}
-
-.lb-head {
-  background:linear-gradient(180deg,rgba(16,167,146,.12),rgba(0,0,0,0)) !important;
-}
-
-.lb-kicker {
-  color:#29e0d0 !important;
-}
-
-.lb-head h2 {
-  color:#f2f7f6 !important;
-}
-
-.lb-head p {
-  color:#91a7ac !important;
-}
-
-.lb-refresh {
-  background:rgba(32,210,190,.07) !important;
-  border-color:rgba(32,210,190,.28) !important;
-  color:#dffaf7 !important;
-}
-
-.lb-refresh:hover {
-  background:rgba(32,210,190,.14) !important;
-}
-
-.lb-table th {
-  background:rgba(4,12,18,.62) !important;
-  color:#29e0d0 !important;
-  border-color:rgba(72,128,137,.22) !important;
-}
-
-.lb-table td {
-  border-color:rgba(72,128,137,.17) !important;
-}
-
-.lb-table tbody tr:hover td {
-  background:rgba(32,210,190,.035) !important;
-}
-
-.lb-pts {
-  color:#2ee1cf !important;
-}
-
-.lb-table tbody tr:first-child td {
-  background:rgba(255,193,72,.045) !important;
-}
-
-.lb-table tbody tr:first-child td:first-child {
-  color:#ffd66b !important;
-}
-
-.lb-table tbody tr:nth-child(2) td:first-child {
-  color:#d9e2e5 !important;
-}
-
-.lb-table tbody tr:nth-child(3) td:first-child {
-  color:#d6a878 !important;
-}
-
-/* Club crests */
-
 .team-name {
   display:inline-flex;
   align-items:center;
@@ -1217,84 +1108,23 @@ footer {
 }
 
 @media(max-width:560px) {
-
-  .wrap {
-    padding:14px 12px;
-  }
-
-  header {
-    padding:22px 8px 16px;
-  }
-
-  .ucl-logo {
-    width:48px;
-    height:48px;
-    font-size:21px;
-  }
-
-  h1 {
-    font-size:25px;
-  }
-
-  .status-strip {
-    font-size:10px;
-    padding:9px 10px;
-  }
-
-  .status-note {
-    font-size:9px;
-  }
-
-  .player {
-    padding:17px;
-  }
-
-  .rounds button {
-    min-width:92px;
-    padding:10px 12px;
-  }
-
-  .card {
-    padding:14px;
-  }
-
-  .team {
-    font-size:12.5px;
-  }
-
-  .pick {
-    font-size:13px;
-    padding:10px;
-  }
-
-  .lb-head {
-    padding:18px 15px 15px;
-  }
-
-  .lb-head h2 {
-    font-size:19px;
-  }
-
-  .table-responsive {
-    padding:0 3px 5px;
-  }
-
-  .lb-table th,
-  .lb-table td {
-    padding:11px 6px;
-  }
-
-  .team-logo {
-    width:20px;
-    height:20px;
-    flex-basis:20px;
-  }
-
-  .ticket-logo {
-    width:17px;
-    height:17px;
-    flex-basis:17px;
-  }
+  .wrap { padding:14px 12px; }
+  header { padding:22px 8px 16px; }
+  .ucl-logo { width:48px; height:48px; font-size:21px; }
+  h1 { font-size:25px; }
+  .status-strip { font-size:10px; padding:9px 10px; }
+  .status-note { font-size:9px; }
+  .player { padding:17px; }
+  .rounds button { min-width:92px; padding:10px 12px; }
+  .card { padding:14px; }
+  .team { font-size:12.5px; }
+  .pick { font-size:13px; padding:10px; }
+  .lb-head { padding:18px 15px 15px; }
+  .lb-head h2 { font-size:19px; }
+  .table-responsive { padding:0 3px 5px; }
+  .lb-table th, .lb-table td { padding:11px 6px; }
+  .team-logo { width:20px; height:20px; flex-basis:20px; }
+  .ticket-logo { width:17px; height:17px; flex-basis:17px; }
 }
 </style>
 </head>
@@ -1337,32 +1167,25 @@ footer {
   </div>
 
   <div class="player">
-
     <label for="player">YOUR DISCORD NAME</label>
-
     <input
       id="player"
       type="text"
       maxlength="50"
       placeholder="e.g. User#1234 or Username"
     >
-
   </div>
 
   <div class="rounds" id="roundNav"></div>
 
   <div class="round-header-info">
-
     <div class="info" id="roundInfo"></div>
-
     <div class="progress-container" id="progressInfo">
       0 / 0 Completed
     </div>
-
   </div>
 
   <div id="message" class="msg"></div>
-
   <div id="matches"></div>
 
   <button
@@ -1379,11 +1202,10 @@ footer {
   <div class="leaderboard-card">
 
     <div class="lb-head">
-
       <div>
         <div class="lb-kicker">LIVE STANDINGS</div>
         <h2>Leaderboard</h2>
-        <p>Track points and prediction accuracy.</p>
+        <p>Track points and prediction accuracy. Click a player to inspect.</p>
       </div>
 
       <button
@@ -1391,7 +1213,6 @@ footer {
         onclick="fetchLeaderboard()">
         ↻ Refresh
       </button>
-
     </div>
 
     <div id="lb-loading" class="lb-status">
@@ -1399,12 +1220,10 @@ footer {
     </div>
 
     <div class="table-responsive">
-
       <table
         class="lb-table"
         id="lb-table"
         style="display: none;">
-
         <thead>
           <tr>
             <th>#</th>
@@ -1414,11 +1233,8 @@ footer {
             <th>Outcome</th>
           </tr>
         </thead>
-
         <tbody id="lb-body"></tbody>
-
       </table>
-
     </div>
 
   </div>
@@ -1430,7 +1246,6 @@ footer {
 </footer>
 
 </div>
-
 
 <!-- TICKET MODAL -->
 
@@ -1447,29 +1262,22 @@ footer {
     <div id="ticketToCapture" class="ticket-card">
 
       <div class="ticket-header">
-
-        <div class="ucl-badge">
+        <div class="ucl-badge" id="modalBadgeTitle">
           ✦ OFFICIAL PREDICTION TICKET ✦
         </div>
-
-        <h3>
+        <h3 id="modalHeadingName">
           UEFA CHAMPIONS LEAGUE
         </h3>
-
         <div class="ticket-meta">
-
           <div>
             User:
             <span id="modalUser"></span>
           </div>
-
           <div>
             Round:
             <span id="modalRound"></span>
           </div>
-
         </div>
-
       </div>
 
       <div
@@ -1478,40 +1286,33 @@ footer {
       </div>
 
       <div class="ticket-footer">
-
         <div>
           Date:
           <span id="modalDate"></span>
         </div>
-
         <div>
           Verified Submission ✔
         </div>
-
       </div>
 
     </div>
 
-    <div class="modal-actions">
-
+    <div class="modal-actions" id="modalActionsContainer">
       <button
         class="btn-download"
         onclick="downloadTicketPNG()">
         📥 Download Ticket (PNG)
       </button>
-
       <button
         class="btn-close-sec"
         onclick="closeModal()">
         Close
       </button>
-
     </div>
 
   </div>
 
 </div>
-
 
 <script>
 
@@ -1689,7 +1490,6 @@ const rounds = {
 ]
 };
 
-
 const teamLogos = {
 "AEK Athens":"https://assets.footylogos.com/logos/aek-athens/aek-athens-logo-footylogos.svg",
 "LASK":"https://assets.footylogos.com/logos/lask/lask-logo-footylogos.svg",
@@ -1729,15 +1529,10 @@ const teamLogos = {
 "Lens":"https://assets.footylogos.com/logos/rc-lens/rc-lens-logo-footylogos.svg"
 };
 
-
 function teamLogo(name, extraClass='') {
-
   const src = teamLogos[name];
-
   if (!src) return '';
-
   const png = src.replace(/\.svg(?:\?.*)?$/i,'.png');
-
   return `
     <img
       class="team-logo ${extraClass}"
@@ -1755,7 +1550,6 @@ function teamLogo(name, extraClass='') {
   `;
 }
 
-
 const roundDates = {
 "1":"8–10 September 2026",
 "2":"13–14 October 2026",
@@ -1766,7 +1560,6 @@ const roundDates = {
 "7":"19–20 January 2027",
 "8":"27 January 2027"
 };
-
 
 const roundUnlockDates = {
 "1":"2026-09-06T18:45:00+02:00",
@@ -1779,7 +1572,6 @@ const roundUnlockDates = {
 "8":"2027-01-25T21:00:00+01:00"
 };
 
-
 const roundLockDates = {
 "1":"2026-09-08T18:45:00+02:00",
 "2":"2026-10-13T18:45:00+02:00",
@@ -1791,14 +1583,11 @@ const roundLockDates = {
 "8":"2027-01-27T21:00:00+01:00"
 };
 
-
 let currentRound = 1;
-
 const selections = {};
-
+let globalLeaderboardData = [];
 
 function esc(s) {
-
   return String(s).replace(
     /[&<>"']/g,
     c => ({
@@ -1809,1027 +1598,477 @@ function esc(s) {
       "'":'&#039;'
     }[c])
   );
-
 }
-
 
 function isOpen(round) {
-
   const now = Date.now();
-
-  const unlock =
-    new Date(roundUnlockDates[round]).getTime();
-
-  const lock =
-    new Date(roundLockDates[round]).getTime();
-
+  const unlock = new Date(roundUnlockDates[round]).getTime();
+  const lock = new Date(roundLockDates[round]).getTime();
   return now >= unlock && now < lock;
-
 }
-
 
 function isRoundClosed(round) {
-
-  return Date.now() >=
-    new Date(roundLockDates[round]).getTime();
-
+  return Date.now() >= new Date(roundLockDates[round]).getTime();
 }
-
 
 function switchMainTab(type) {
-
-  const predsView =
-    document.getElementById('view-predictions');
-
-  const lbView =
-    document.getElementById('view-leaderboard');
-
-  const predsBtn =
-    document.getElementById('tab-preds-btn');
-
-  const lbBtn =
-    document.getElementById('tab-lb-btn');
-
+  const predsView = document.getElementById('view-predictions');
+  const lbView = document.getElementById('view-leaderboard');
+  const predsBtn = document.getElementById('tab-preds-btn');
+  const lbBtn = document.getElementById('tab-lb-btn');
 
   if(type === 'preds') {
-
     predsView.classList.add('active');
     lbView.classList.remove('active');
-
     predsBtn.classList.add('active');
     lbBtn.classList.remove('active');
-
   } else {
-
     lbView.classList.add('active');
     predsView.classList.remove('active');
-
     lbBtn.classList.add('active');
     predsBtn.classList.remove('active');
-
     fetchLeaderboard();
-
   }
-
 }
 
-
 function fetchLeaderboard() {
-
-  const loading =
-    document.getElementById('lb-loading');
-
-  const table =
-    document.getElementById('lb-table');
-
-  const tbody =
-    document.getElementById('lb-body');
-
+  const loading = document.getElementById('lb-loading');
+  const table = document.getElementById('lb-table');
+  const tbody = document.getElementById('lb-body');
 
   loading.style.display='block';
   loading.textContent='Loading rankings...';
-
   table.style.display='none';
-
 
   fetch(`${APPS_SCRIPT_URL}?action=ranking`)
     .then(res => res.json())
     .then(data => {
-
       if(data.success && data.ranking) {
-
+        globalLeaderboardData = data.ranking;
         tbody.innerHTML='';
 
-
         if(data.ranking.length === 0) {
-
           loading.textContent='No scores recorded yet.';
           return;
-
         }
 
-
-        data.ranking.forEach(r => {
-
-          const tr =
-            document.createElement('tr');
-
+        data.ranking.forEach((r, index) => {
+          const tr = document.createElement('tr');
           tr.innerHTML=`
             <td><strong>${r.rank}</strong></td>
-            <td class="lb-player">${esc(r.player)}</td>
+            <td class="lb-player" onclick="inspectPlayer(${index})">${esc(r.player)}</td>
             <td class="lb-pts">${r.points}</td>
             <td>${r.exactScores}</td>
             <td>${r.correctOutcomes}</td>
           `;
-
           tbody.appendChild(tr);
-
         });
-
 
         loading.style.display='none';
         table.style.display='table';
-
       } else {
-
-        loading.textContent=
-          'No ranking data available yet.';
-
+        loading.textContent='No ranking data available yet.';
       }
-
     })
     .catch(err => {
-
-      loading.textContent=
-        'Failed to load leaderboard.';
-
+      loading.textContent='Failed to load leaderboard.';
       console.error(err);
-
     });
-
 }
 
+function inspectPlayer(index) {
+  const playerRecord = globalLeaderboardData[index];
+  if (!playerRecord) return;
 
-function checkServerDuplicate(player, round) {
+  // Pozivamo Google Script da povučemo detaljne prognoze igrača za inspekciju
+  const callback = 'inspectCallback_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+  const script = document.createElement('script');
 
-  return new Promise(function(resolve) {
+  window[callback] = function(data) {
+    if(script.parentNode) script.parentNode.removeChild(script);
+    try { delete window[callback]; } catch(e) {}
 
-    const callback =
-      'uclDuplicateCheck_' +
-      Date.now() +
-      '_' +
-      Math.floor(Math.random()*100000);
-
-    const script =
-      document.createElement('script');
-
-    let finished=false;
-
-
-    function cleanup() {
-
-      if(script.parentNode)
-        script.parentNode.removeChild(script);
-
-      try {
-        delete window[callback];
-      } catch(e) {}
-
+    if(data && data.success && data.predictions) {
+      openInspectorModal(playerRecord.player, data.round || 'Predictions', data.predictions);
+    } else {
+      alert('Could not load detailed predictions for this player.');
     }
+  };
 
+  script.src = APPS_SCRIPT_URL + '?action=player_predictions&player=' + encodeURIComponent(playerRecord.player) + '&callback=' + encodeURIComponent(callback);
+  script.onerror = function() {
+    if(script.parentNode) script.parentNode.removeChild(script);
+    alert('Failed to fetch player details.');
+  };
+  document.body.appendChild(script);
+}
 
-    function finish(value) {
+function openInspectorModal(player, roundName, predictions) {
+  document.getElementById('modalUser').textContent = player;
+  document.getElementById('modalRound').textContent = roundName;
+  document.getElementById('modalBadgeTitle').textContent = '✦ PLAYER PREVIEW INSPECTOR ✦';
+  document.getElementById('modalHeadingName').textContent = 'MATCH PERFORMANCE';
+  document.getElementById('modalDate').textContent = new Date().toLocaleDateString();
+  document.getElementById('modalActionsContainer').style.display = 'none';
 
-      if(finished) return;
+  const container = document.getElementById('modalMatches');
+  container.innerHTML = '';
 
-      finished=true;
+  predictions.forEach((p, idx) => {
+    // p obično sadrži match, prediction, score, eventualno status tačnosti ako vraća server
+    const matchParts = p.match.split(' vs ');
+    const homeTeam = matchParts[0] || 'Team A';
+    const awayTeam = matchParts[1] || 'Team B';
 
-      cleanup();
+    const item = document.createElement('div');
+    item.className = 'ticket-item';
 
-      resolve(!!value);
+    // Provera da li je pogodak (ako server vraća status ili ako imamo realne rezultate)
+    let badgeClass = 'badge-pick';
+    if(p.resultStatus === 'exact') badgeClass += ' badge-hit';
+    else if(p.resultStatus === 'outcome') badgeClass += ' badge-hit';
+    else if(p.resultStatus === 'miss') badgeClass += ' badge-miss';
 
-    }
-
-
-    window[callback] =
-      function(data) {
-
-        finish(
-          data &&
-          data.duplicate === true
-        );
-
-      };
-
-
-    script.src =
-      APPS_SCRIPT_URL +
-      '?player=' +
-      encodeURIComponent(player) +
-      '&round=' +
-      encodeURIComponent('Round '+round) +
-      '&callback=' +
-      encodeURIComponent(callback);
-
-
-    script.onerror =
-      function() {
-        finish(false);
-      };
-
-
-    document.body.appendChild(script);
-
-
-    setTimeout(
-      function() {
-        finish(false);
-      },
-      8000
-    );
-
+    item.innerHTML = `
+      <div class="ticket-teams" title="${esc(p.match)}">
+        <span class="ticket-team">
+          ${teamLogo(homeTeam, 'ticket-logo')}
+          <span title="${esc(homeTeam)}">${esc(homeTeam)}</span>
+        </span>
+        <span class="ticket-vs">vs</span>
+        <span class="ticket-team">
+          <span title="${esc(awayTeam)}">${esc(awayTeam)}</span>
+          ${teamLogo(awayTeam, 'ticket-logo')}
+        </span>
+      </div>
+      <div class="ticket-badges">
+        <span class="badge-pick ${badgeClass}">
+          ${esc(p.prediction)}
+        </span>
+        <span class="badge-score ${badgeClass}">
+          ${esc(p.score)}
+        </span>
+      </div>
+    `;
+    container.appendChild(item);
   });
 
+  document.getElementById('ticketModal').style.display = 'flex';
 }
 
+function checkServerDuplicate(player, round) {
+  return new Promise(function(resolve) {
+    const callback = 'uclDuplicateCheck_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+    const script = document.createElement('script');
+    let finished=false;
+
+    function cleanup() {
+      if(script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callback]; } catch(e) {}
+    }
+
+    function finish(value) {
+      if(finished) return;
+      finished=true;
+      cleanup();
+      resolve(!!value);
+    }
+
+    window[callback] = function(data) {
+      finish(data && data.duplicate === true);
+    };
+
+    script.src = APPS_SCRIPT_URL + '?player=' + encodeURIComponent(player) + '&round=' + encodeURIComponent('Round '+round) + '&callback=' + encodeURIComponent(callback);
+    script.onerror = function() { finish(false); };
+    document.body.appendChild(script);
+
+    setTimeout(function() { finish(false); }, 8000);
+  });
+}
 
 function renderNav() {
-
-  const nav =
-    document.getElementById('roundNav');
-
+  const nav = document.getElementById('roundNav');
   nav.innerHTML='';
 
+  for(let r=1; r<=8; r++) {
+    const b = document.createElement('button');
+    const open = isOpen(r);
+    const closed = isRoundClosed(r);
 
-  for(let r=1;r<=8;r++) {
-
-    const b =
-      document.createElement('button');
-
-    const open =
-      isOpen(r);
-
-    const closed =
-      isRoundClosed(r);
-
-
-    b.className =
-      (r===currentRound?'active ':'') +
-      (open?'':'locked');
-
-
-    b.textContent =
-      'ROUND '+r+
-      (closed?' 🔒':(open?'':' ⏳'));
-
-
+    b.className = (r===currentRound?'active ':'') + (open?'':'locked');
+    b.textContent = 'ROUND '+r + (closed?' 🔒':(open?'':' ⏳'));
     b.onclick=()=>{
       currentRound=r;
       render();
     };
-
-
     nav.appendChild(b);
-
   }
-
 }
-
 
 function updateProgress() {
-
   if(!isOpen(currentRound)) {
-
-    document.getElementById(
-      'progressInfo'
-    ).style.display='none';
-
+    document.getElementById('progressInfo').style.display='none';
     return;
-
   }
+  document.getElementById('progressInfo').style.display='block';
 
-
-  document.getElementById(
-    'progressInfo'
-  ).style.display='block';
-
-
-  const total =
-    rounds[currentRound].length;
-
+  const total = rounds[currentRound].length;
   let done=0;
 
-
-  for(let i=0;i<total;i++) {
-
-    const p =
-      selections[currentRound+'_'+i];
-
-    const score =
-      scoreFor(i);
-
-
-    if(p && validScore(score))
-      done++;
-
+  for(let i=0; i<total; i++) {
+    const p = selections[currentRound+'_'+i];
+    const score = scoreFor(i);
+    if(p && validScore(score)) done++;
   }
 
-
-  document.getElementById(
-    'progressInfo'
-  ).textContent =
-    `${done} / ${total} Filled`;
-
+  document.getElementById('progressInfo').textContent = `${done} / ${total} Filled`;
 }
 
-
 function render() {
-
   renderNav();
 
+  const open = isOpen(currentRound);
+  const closed = isRoundClosed(currentRound);
+  const info = document.getElementById('roundInfo');
 
-  const open =
-    isOpen(currentRound);
+  info.textContent = 'Round ' + currentRound + ' • ' + roundDates[currentRound] + ' • ' + (open?'OPEN':(closed?'CLOSED':'LOCKED'));
 
-  const closed =
-    isRoundClosed(currentRound);
-
-
-  const info =
-    document.getElementById('roundInfo');
-
-
-  info.textContent =
-    'Round '+
-    currentRound+
-    ' • '+
-    roundDates[currentRound]+
-    ' • '+
-    (open?'OPEN':(closed?'CLOSED':'LOCKED'));
-
-
-  const box =
-    document.getElementById('matches');
-
-
+  const box = document.getElementById('matches');
   box.innerHTML='';
-
-
-  const btn =
-    document.getElementById('submitBtn');
-
+  const btn = document.getElementById('submitBtn');
 
   updateProgress();
 
-
   if(!open) {
-
     if(closed) {
-
-      box.innerHTML=
-      '<div class="card lockbox closed">'+
-      '<div class="lockicon">🔒</div>'+
-      '<b>Round '+currentRound+' is CLOSED</b>'+
-      '<br>'+
-      '<span>Predictions are no longer accepted because the first match has started.</span>'+
-      '</div>';
-
+      box.innerHTML = '<div class="card lockbox closed"><div class="lockicon">🔒</div><b>Round '+currentRound+' is CLOSED</b><br><span>Predictions are no longer accepted because the first match has started.</span></div>';
     } else {
-
-      box.innerHTML=
-      '<div class="card lockbox">'+
-      '<div class="lockicon">⏳</div>'+
-      '<b>Round '+currentRound+' is locked</b>'+
-      '<br>'+
-      '<span>It will open automatically 2 days before the round starts.</span>'+
-      '</div>';
-
+      box.innerHTML = '<div class="card lockbox"><div class="lockicon">⏳</div><b>Round '+currentRound+' is locked</b><br><span>It will open automatically 2 days before the round starts.</span></div>';
     }
-
-
     btn.disabled=true;
-
     return;
-
   }
-
 
   btn.disabled=false;
 
-
   rounds[currentRound].forEach((m,i)=>{
+    const key = currentRound+'_'+i;
+    const selected = selections[key] || '';
+    const score = scoreFor(i);
+    const isCompleted = selected && validScore(score);
 
-    const key =
-      currentRound+'_'+i;
-
-    const selected =
-      selections[key] || '';
-
-    const score =
-      scoreFor(i);
-
-    const isCompleted =
-      selected &&
-      validScore(score);
-
-
-    const card =
-      document.createElement('div');
-
-
-    card.className =
-      'card' +
-      (isCompleted?' completed':'');
-
+    const card = document.createElement('div');
+    card.className = 'card' + (isCompleted?' completed':'');
 
     card.innerHTML=`
-
       <div class="match">
-
         <div class="team">
-
           <span class="team-name">
-
             ${teamLogo(m[0])}
-
-            <span>
-              ${esc(m[0])}
-            </span>
-
+            <span>${esc(m[0])}</span>
           </span>
-
         </div>
-
-
-        <div class="vs">
-          VS
-        </div>
-
-
+        <div class="vs">VS</div>
         <div class="team away">
-
           <span class="team-name">
-
-            <span>
-              ${esc(m[1])}
-            </span>
-
+            <span>${esc(m[1])}</span>
             ${teamLogo(m[1])}
-
           </span>
-
         </div>
-
       </div>
-
-
       <div class="options">
-
-        <button
-          class="pick ${selected==='1'?'selected':''}"
-          onclick="pick(${i},'1')">
-          1
-        </button>
-
-        <button
-          class="pick ${selected==='X'?'selected':''}"
-          onclick="pick(${i},'X')">
-          X
-        </button>
-
-        <button
-          class="pick ${selected==='2'?'selected':''}"
-          onclick="pick(${i},'2')">
-          2
-        </button>
-
+        <button class="pick ${selected==='1'?'selected':''}" onclick="pick(${i},'1')">1</button>
+        <button class="pick ${selected==='X'?'selected':''}" onclick="pick(${i},'X')">X</button>
+        <button class="pick ${selected==='2'?'selected':''}" onclick="pick(${i},'2')">2</button>
       </div>
-
-
       <div class="score-row">
-
-        <span class="score-label">
-          EXACT SCORE
-        </span>
-
+        <span class="score-label">EXACT SCORE</span>
         <div class="score-boxes">
-
-          <input
-            class="score-input"
-            id="home-score-${i}"
-            inputmode="numeric"
-            maxlength="2"
-            placeholder="0"
-            value="${scoreParts(i)[0]}"
-            oninput="setScorePart(${i},'home',this.value)"
-          >
-
-          <span class="score-colon">
-            :
-          </span>
-
-          <input
-            class="score-input"
-            id="away-score-${i}"
-            inputmode="numeric"
-            maxlength="2"
-            placeholder="0"
-            value="${scoreParts(i)[1]}"
-            oninput="setScorePart(${i},'away',this.value)"
-          >
-
+          <input class="score-input" id="home-score-${i}" inputmode="numeric" maxlength="2" placeholder="0" value="${scoreParts(i)[0]}" oninput="setScorePart(${i},'home',this.value)">
+          <span class="score-colon">:</span>
+          <input class="score-input" id="away-score-${i}" inputmode="numeric" maxlength="2" placeholder="0" value="${scoreParts(i)[1]}" oninput="setScorePart(${i},'away',this.value)">
         </div>
-
       </div>
     `;
-
-
     box.appendChild(card);
-
   });
-
 }
-
 
 function pick(i,value) {
-
-  selections[
-    currentRound+'_'+i
-  ]=value;
-
+  selections[currentRound+'_'+i] = value;
   render();
-
 }
-
 
 function scoreFor(i) {
-
-  return selections[
-    currentRound+'_score_'+i
-  ] || '';
-
+  return selections[currentRound+'_score_'+i] || '';
 }
-
 
 function scoreParts(i) {
-
-  const value =
-    scoreFor(i).replace('-',':');
-
-  const parts =
-    value.split(':');
-
-  return [
-    parts[0]||'',
-    parts[1]||''
-  ];
-
+  const value = scoreFor(i).replace('-',':');
+  const parts = value.split(':');
+  return [parts[0]||'', parts[1]||''];
 }
-
 
 function setScorePart(i,side,value) {
+  value = String(value||'').replace(/\D/g,'').slice(0,2);
+  const parts = scoreParts(i);
 
-  value =
-    String(value||'')
-      .replace(/\D/g,'')
-      .slice(0,2);
+  if(side==='home') parts[0]=value;
+  else parts[1]=value;
 
-
-  const parts =
-    scoreParts(i);
-
-
-  if(side==='home')
-    parts[0]=value;
-  else
-    parts[1]=value;
-
-
-  selections[
-    currentRound+'_score_'+i
-  ] =
-    parts[0]+':'+parts[1];
-
-
-  const key =
-    currentRound+'_'+i;
-
-
-  const card =
-    document.querySelectorAll('.card')[i];
-
+  selections[currentRound+'_score_'+i] = parts[0]+':'+parts[1];
+  const key = currentRound+'_'+i;
+  const card = document.querySelectorAll('.card')[i];
 
   if(card) {
-
-    if(
-      selections[key] &&
-      validScore(parts[0]+':'+parts[1])
-    ) {
-
+    if(selections[key] && validScore(parts[0]+':'+parts[1])) {
       card.classList.add('completed');
-
     } else {
-
       card.classList.remove('completed');
-
     }
-
   }
-
-
   updateProgress();
-
 }
-
 
 function validScore(value) {
-
   return /^\d{1,2}:\d{1,2}$/.test(value);
-
 }
-
 
 function showMsg(text,type) {
-
-  const m =
-    document.getElementById('message');
-
-  m.className =
-    'msg '+type;
-
+  const m = document.getElementById('message');
+  m.className = 'msg '+type;
   m.textContent=text;
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
 
+function openTicketModal(player, roundNum, predictions) {
+  document.getElementById('modalUser').textContent = player;
+  document.getElementById('modalRound').textContent = 'Round '+roundNum;
+  document.getElementById('modalBadgeTitle').textContent = '✦ OFFICIAL PREDICTION TICKET ✦';
+  document.getElementById('modalHeadingName').textContent = 'UEFA CHAMPIONS LEAGUE';
+  document.getElementById('modalActionsContainer').style.display = 'flex';
 
-/* =========================================================
-   TICKET
-   ========================================================= */
+  const now = new Date();
+  document.getElementById('modalDate').textContent = now.toLocaleDateString()+' '+now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 
-function openTicketModal(
-  player,
-  roundNum,
-  predictions
-) {
-
-  document.getElementById(
-    'modalUser'
-  ).textContent=player;
-
-
-  document.getElementById(
-    'modalRound'
-  ).textContent=
-    'Round '+roundNum;
-
-
-  const now =
-    new Date();
-
-
-  document.getElementById(
-    'modalDate'
-  ).textContent =
-    now.toLocaleDateString()+
-    ' '+
-    now.toLocaleTimeString(
-      [],
-      {
-        hour:'2-digit',
-        minute:'2-digit'
-      }
-    );
-
-
-  const container =
-    document.getElementById(
-      'modalMatches'
-    );
-
-
+  const container = document.getElementById('modalMatches');
   container.innerHTML='';
 
-
   predictions.forEach((p,idx)=>{
-
-    const pair =
-      rounds[roundNum][idx];
-
-
-    const item =
-      document.createElement('div');
-
-
+    const pair = rounds[roundNum][idx];
+    const item = document.createElement('div');
     item.className='ticket-item';
 
-
-    /*
-      IMPORTANT:
-      Home team / VS / Away team are now
-      separated into their own grid columns.
-    */
-
     item.innerHTML=`
-
-      <div
-        class="ticket-teams"
-        title="${esc(p.match)}"
-      >
-
+      <div class="ticket-teams" title="${esc(p.match)}">
         <span class="ticket-team">
-
           ${teamLogo(pair[0],'ticket-logo')}
-
-          <span title="${esc(pair[0])}">
-            ${esc(pair[0])}
-          </span>
-
+          <span title="${esc(pair[0])}">${esc(pair[0])}</span>
         </span>
-
-
-        <span class="ticket-vs">
-          vs
-        </span>
-
-
+        <span class="ticket-vs">vs</span>
         <span class="ticket-team">
-
-          <span title="${esc(pair[1])}">
-            ${esc(pair[1])}
-          </span>
-
+          <span title="${esc(pair[1])}">${esc(pair[1])}</span>
           ${teamLogo(pair[1],'ticket-logo')}
-
         </span>
-
       </div>
-
-
       <div class="ticket-badges">
-
-        <span class="badge-pick">
-          ${esc(p.prediction)}
-        </span>
-
-        <span class="badge-score">
-          ${esc(p.score)}
-        </span>
-
+        <span class="badge-pick">${esc(p.prediction)}</span>
+        <span class="badge-score">${esc(p.score)}</span>
       </div>
-
     `;
-
-
     container.appendChild(item);
-
   });
 
-
-  document.getElementById(
-    'ticketModal'
-  ).style.display='flex';
-
+  document.getElementById('ticketModal').style.display='flex';
 }
-
 
 function closeModal() {
-
-  document.getElementById(
-    'ticketModal'
-  ).style.display='none';
-
+  document.getElementById('ticketModal').style.display='none';
 }
-
 
 function downloadTicketPNG() {
-
-  const ticketElement =
-    document.getElementById(
-      'ticketToCapture'
-    );
-
-
-  html2canvas(
-    ticketElement,
-    {
-      backgroundColor:'#050c1e',
-      scale:2,
-      windowHeight:
-        ticketElement.scrollHeight
-    }
-  ).then(canvas=>{
-
-    const link =
-      document.createElement('a');
-
-
-    const player =
-      document.getElementById(
-        'modalUser'
-      ).textContent || 'User';
-
-
-    link.download =
-      `UCL_Ticket_Round_${currentRound}_${player}.png`;
-
-
-    link.href =
-      canvas.toDataURL('image/png');
-
-
+  const ticketElement = document.getElementById('ticketToCapture');
+  html2canvas(ticketElement, {
+    backgroundColor:'#050c1e',
+    scale:2,
+    windowHeight: ticketElement.scrollHeight
+  }).then(canvas=>{
+    const link = document.createElement('a');
+    const player = document.getElementById('modalUser').textContent || 'User';
+    link.download = `UCL_Ticket_Round_${currentRound}_${player}.png`;
+    link.href = canvas.toDataURL('image/png');
     link.click();
-
   });
-
 }
-
 
 async function submitPredictions() {
-
-  const player =
-    (
-      document.getElementById('player').value
-      || ''
-    ).trim();
-
-
-  if(!player)
-    return showMsg(
-      'Please enter your Discord name.',
-      'err'
-    );
-
+  const player = (document.getElementById('player').value || '').trim();
+  if(!player) return showMsg('Please enter your Discord name.', 'err');
 
   if(!isOpen(currentRound)) {
-
     if(isRoundClosed(currentRound)) {
-
-      return showMsg(
-        'Predictions are closed. The first match of this round has already started.',
-        'err'
-      );
-
+      return showMsg('Predictions are closed. The first match of this round has already started.', 'err');
     }
-
-    return showMsg(
-      'This round is still locked.',
-      'err'
-    );
-
+    return showMsg('This round is still locked.', 'err');
   }
 
-
-  const duplicate =
-    await checkServerDuplicate(
-      player,
-      currentRound
-    );
-
-
-  if(duplicate)
-    return showMsg(
-      'You have already submitted this round.',
-      'err'
-    );
-
+  const duplicate = await checkServerDuplicate(player, currentRound);
+  if(duplicate) return showMsg('You have already submitted this round.', 'err');
 
   const preds=[];
+  for(let i=0; i<rounds[currentRound].length; i++){
+    const p = selections[currentRound+'_'+i];
+    const score = scoreFor(i).replace('-',':');
 
-
-  for(
-    let i=0;
-    i<rounds[currentRound].length;
-    i++
-  ){
-
-    const p =
-      selections[
-        currentRound+'_'+i
-      ];
-
-
-    const score =
-      scoreFor(i).replace('-',':');
-
-
-    if(!p)
-      return showMsg(
-        'Please predict every match before submitting.',
-        'err'
-      );
-
-
-    if(!validScore(score))
-      return showMsg(
-        'Please enter a valid exact score for every match, e.g. 0:0.',
-        'err'
-      );
-
+    if(!p) return showMsg('Please predict every match before submitting.', 'err');
+    if(!validScore(score)) return showMsg('Please enter a valid exact score for every match, e.g. 0:0.', 'err');
 
     preds.push({
-      match:
-        rounds[currentRound][i][0]+
-        ' vs '+
-        rounds[currentRound][i][1],
-
-      prediction:p,
-
-      score:score
+      match: rounds[currentRound][i][0]+' vs '+rounds[currentRound][i][1],
+      prediction: p,
+      score: score
     });
-
   }
 
-
-  const btn =
-    document.getElementById(
-      'submitBtn'
-    );
-
-
+  const btn = document.getElementById('submitBtn');
   btn.disabled=true;
-
   btn.textContent='SENDING...';
 
-
   const payload={
-    player:player,
-    round:'Round '+currentRound,
-    predictions:preds
+    player: player,
+    round: 'Round '+currentRound,
+    predictions: preds
   };
 
-
   try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
 
-    await fetch(
-      APPS_SCRIPT_URL,
-      {
-        method:'POST',
-        mode:'no-cors',
-        headers:{
-          'Content-Type':
-            'text/plain;charset=utf-8'
-        },
-        body:JSON.stringify(payload)
-      }
-    );
-
-
-    showMsg(
-      'Predictions submitted successfully!',
-      'ok'
-    );
-
-
+    showMsg('Predictions submitted successfully!', 'ok');
     btn.textContent='SUBMITTED ✔';
-
-
-    openTicketModal(
-      player,
-      currentRound,
-      preds
-    );
-
-
+    openTicketModal(player, currentRound, preds);
     render();
-
-
   } catch(err) {
-
     btn.disabled=false;
-
-    btn.textContent=
-      'SUBMIT ROUND PREDICTIONS';
-
-    showMsg(
-      'Submission failed. Please try again.',
-      'err'
-    );
-
+    btn.textContent='SUBMIT ROUND PREDICTIONS';
+    showMsg('Submission failed. Please try again.', 'err');
   }
-
 }
 
+document.getElementById('player').addEventListener('input', ()=>render());
 
-document
-  .getElementById('player')
-  .addEventListener(
-    'input',
-    ()=>render()
-  );
-
-
-let lastRoundOpenState =
-  isOpen(currentRound);
-
-
-setInterval(
-  function(){
-
-    const nowOpen =
-      isOpen(currentRound);
-
-
-    if(
-      nowOpen !==
-      lastRoundOpenState
-    ){
-
-      lastRoundOpenState =
-        nowOpen;
-
-      render();
-
-    }
-
-  },
-  30000
-);
-
+let lastRoundOpenState = isOpen(currentRound);
+setInterval(function(){
+  const nowOpen = isOpen(currentRound);
+  if(nowOpen !== lastRoundOpenState){
+    lastRoundOpenState = nowOpen;
+    render();
+  }
+}, 30000);
 
 render();
 
